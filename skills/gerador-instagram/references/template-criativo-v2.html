@@ -1,0 +1,834 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Criativo [NN] — [SLUG] | [PROJETO]</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@400;600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: #1a1a1a;
+    font-family: 'Inter', sans-serif;
+    display: flex;
+    min-height: 100vh;
+    align-items: flex-start;
+    padding: 40px 320px 40px 40px;
+  }
+
+  .canvas-wrap {
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    flex: 1;
+  }
+
+  /* ── SLIDE ── */
+  .slide {
+    width: 420px;
+    min-width: 420px;
+    height: 525px; /* 4:5 default */
+    position: relative;
+    overflow: hidden;
+    background: #0a0a0a;
+    display: flex;
+    flex-direction: column;
+    border-radius: 2px;
+  }
+
+  /* ── Photo layer ── */
+  .photo-layer {
+    position: absolute; inset: 0;
+    overflow: hidden; z-index: 1;
+  }
+  .photo-layer::before {
+    content: ''; position: absolute; inset: 0;
+    background: radial-gradient(ellipse at 50% 35%, rgba(34,197,94,0.08) 0%, transparent 60%),
+      linear-gradient(180deg, #0a0a0a 0%, #0a0a0a 100%);
+    z-index: 0;
+  }
+  .photo-image {
+    position: absolute; top: 0; left: 0;
+    width: 100%; height: 100%;
+    object-fit: cover;
+    object-position: center 50%;
+    z-index: 1;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+  .photo-image.active { opacity: 1; z-index: 3; }
+  .photo-image.flipped { transform: scaleX(-1); }
+
+  /* ── Transparency overlay ── */
+  .transparency-overlay {
+    position: absolute; inset: 0;
+    background: #000; opacity: 0;
+    z-index: 4; pointer-events: none;
+  }
+
+  /* ── Darkening overlay ── */
+  .overlay-darkening {
+    position: absolute; inset: 0;
+    background: linear-gradient(180deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0.15) 40%, rgba(0,0,0,0.45) 100%);
+    z-index: 6; pointer-events: none;
+  }
+
+  /* ── Screenshot layer ── */
+  .screenshot-layer {
+    position: absolute; z-index: 8;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    width: 70%; overflow: hidden;
+    border-radius: 12px;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.5);
+    display: none; pointer-events: none;
+  }
+  .screenshot-layer img { width: 100%; height: auto; display: block; }
+  .screenshot-layer.active { display: block; }
+
+  /* ── Glow effects ── */
+  .glow-green {
+    position: absolute; top: -60px; left: 50%; transform: translateX(-50%);
+    width: 300px; height: 200px;
+    background: radial-gradient(ellipse, rgba(34,197,94,0.18) 0%, transparent 70%);
+    z-index: 9; pointer-events: none;
+  }
+  .glow-yellow {
+    position: absolute; bottom: -60px; right: -40px;
+    width: 250px; height: 200px;
+    background: radial-gradient(ellipse, rgba(250,204,21,0.12) 0%, transparent 70%);
+    z-index: 9; pointer-events: none;
+  }
+
+  /* ── Text layer ── */
+  .text-layer {
+    position: absolute; inset: 0; z-index: 10;
+    display: flex; flex-direction: column;
+    justify-content: space-between;
+    padding: 28px 32px;
+  }
+
+  .badge {
+    display: inline-flex; align-items: center; gap: 6px;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.10);
+    border-radius: 100px; padding: 5px 12px;
+    font-size: 8px; font-weight: 700;
+    letter-spacing: 1.5px; text-transform: uppercase;
+    color: rgba(255,255,255,0.6); width: fit-content;
+  }
+  .badge-dot { width: 5px; height: 5px; background: #22c55e; border-radius: 50%; flex-shrink: 0; }
+
+  .headline-block {
+    flex: 1; display: flex; flex-direction: column;
+    justify-content: center; padding: 18px 0 12px;
+  }
+
+  .headline {
+    font-size: 28px; font-weight: 900; line-height: 1.1;
+    color: #ffffff; letter-spacing: -0.5px; margin-bottom: 14px;
+    text-shadow: 0 2px 12px rgba(0,0,0,0.5);
+  }
+  .headline .accent-green { color: #4ade80; }
+
+  .divider { width: 36px; height: 3px; background: #4ade80; border-radius: 2px; margin-bottom: 16px; }
+
+  .sub {
+    font-size: 13px; font-weight: 400; color: #a1a1aa; line-height: 1.5;
+    text-shadow: 0 1px 6px rgba(0,0,0,0.5);
+  }
+  .sub strong { color: #facc15; font-weight: 700; }
+
+  /* ── CTA Bar ── */
+  .cta-bar {
+    position: absolute;
+    bottom: 6%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 82%;
+    background: linear-gradient(135deg, #facc15, #eab308);
+    color: #000000;
+    padding: 10px 0;
+    text-align: center;
+    font-family: 'Inter', sans-serif;
+    font-size: 11px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    border-radius: 4px;
+    z-index: 11;
+  }
+
+  /* ── Safe zone ── */
+  .safe-zone {
+    position: absolute; z-index: 50; pointer-events: none;
+    top: 24px; left: 24px; right: 24px; bottom: 24px;
+    border: 1px dashed rgba(255,255,0,0.3);
+    display: none;
+  }
+
+  /* ── PANEL ── */
+  #controlPanel {
+    position: fixed; right: 0; top: 0; bottom: 0;
+    width: 300px; background: #111;
+    border-left: 1px solid rgba(255,255,255,0.06);
+    overflow-y: auto; z-index: 1000;
+    font-family: 'Inter', sans-serif;
+  }
+  #controlPanel::-webkit-scrollbar { width: 4px; }
+  #controlPanel::-webkit-scrollbar-track { background: transparent; }
+  #controlPanel::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 2px; }
+
+  .panel-header { padding: 20px 16px 16px; border-bottom: 1px solid rgba(255,255,255,0.06); }
+  .panel-header h2 { font-size: 13px; font-weight: 700; color: #fff; }
+  .panel-header p { font-size: 10px; color: rgba(255,255,255,0.3); margin-top: 2px; }
+
+  .panel-group { border-bottom: 1px solid rgba(255,255,255,0.06); }
+  .group-title { padding: 14px 16px 0; font-size: 11px; font-weight: 700; color: #fff; letter-spacing: 0.5px; text-transform: uppercase; }
+  .panel-row { padding: 10px 16px; }
+  .row-label { font-size: 10px; font-weight: 500; color: rgba(255,255,255,0.4); margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px; }
+
+  .toggle-group { display: flex; gap: 4px; flex-wrap: wrap; }
+  .toggle-btn {
+    padding: 5px 10px; font-size: 10px; font-weight: 600;
+    background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.08);
+    color: rgba(255,255,255,0.5); border-radius: 4px; cursor: pointer;
+    transition: all 0.15s; font-family: 'Inter', sans-serif;
+  }
+  .toggle-btn:hover { background: rgba(255,255,255,0.1); color: #fff; }
+  .toggle-btn.active { background: rgba(255,255,255,0.15); border-color: rgba(255,255,255,0.3); color: #fff; }
+
+  .style-toggle { display: flex; gap: 4px; flex-wrap: wrap; }
+  .style-toggle button {
+    padding: 5px 10px; font-size: 10px; font-weight: 600;
+    background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.08);
+    color: rgba(255,255,255,0.5); border-radius: 4px; cursor: pointer;
+    transition: all 0.15s; font-family: 'Inter', sans-serif;
+  }
+  .style-toggle button:hover { background: rgba(255,255,255,0.1); color: #fff; }
+  .style-toggle button.active { background: rgba(255,255,255,0.15); border-color: rgba(255,255,255,0.3); color: #fff; }
+
+  .slider-row { display: flex; align-items: center; gap: 10px; }
+  .slider-row input[type="range"] { flex: 1; }
+  .slider-val { font-size: 11px; font-weight: 600; color: rgba(255,255,255,0.7); min-width: 36px; text-align: right; }
+
+  input[type="range"] {
+    -webkit-appearance: none; appearance: none;
+    width: 100%; height: 4px; border-radius: 2px; outline: none; cursor: pointer;
+  }
+  input[type="range"]::-webkit-slider-runnable-track { height: 4px; border-radius: 2px; background: transparent; }
+  input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none; width: 14px; height: 14px; border-radius: 50%;
+    background: #fff; cursor: pointer; margin-top: -5px; border: none;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.4);
+  }
+  input[type="range"]::-moz-range-track { height: 4px; border-radius: 2px; background: rgba(255,255,255,0.1); border: none; }
+  input[type="range"]::-moz-range-progress { height: 4px; border-radius: 2px; background: rgba(255,255,255,0.5); }
+  input[type="range"]::-moz-range-thumb { width: 14px; height: 14px; border-radius: 50%; background: #fff; cursor: pointer; border: none; }
+
+  /* Upload zone */
+  .upload-zone {
+    border: 2px dashed rgba(255,255,255,0.15); border-radius: 8px;
+    padding: 16px; text-align: center; cursor: pointer;
+    transition: all 0.2s; background: rgba(255,255,255,0.02);
+  }
+  .upload-zone:hover { border-color: rgba(255,255,255,0.35); background: rgba(255,255,255,0.04); }
+  .upload-zone.dragover { border-color: #fff; background: rgba(255,255,255,0.06); }
+  .upload-zone p { font-size: 11px; color: rgba(255,255,255,0.5); }
+  .upload-zone .ico { font-size: 20px; display: block; margin-bottom: 6px; color: rgba(255,255,255,0.3); }
+
+  .btn-secondary {
+    margin-top: 8px; padding: 6px 12px; font-size: 10px; font-weight: 600;
+    background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.08);
+    color: rgba(255,255,255,0.5); border-radius: 4px; cursor: pointer;
+    font-family: 'Inter', sans-serif; transition: all 0.15s;
+  }
+  .btn-secondary:hover { background: rgba(255,255,255,0.1); color: #fff; }
+
+  #headlineInput, #subInput {
+    width: 100%; padding: 6px 10px; font-size: 11px; font-weight: 600;
+    background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1);
+    color: #fff; border-radius: 4px; font-family: 'Inter', sans-serif;
+    outline: none; resize: vertical;
+  }
+  #headlineInput:focus, #subInput:focus { border-color: rgba(255,255,255,0.3); }
+  #headlineInput { min-height: 60px; }
+  #subInput { min-height: 50px; }
+  #badgeInput, #ctaTextInput {
+    width: 100%; padding: 6px 10px; font-size: 11px; font-weight: 600;
+    background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1);
+    color: #fff; border-radius: 4px; font-family: 'Inter', sans-serif;
+    outline: none;
+  }
+  #badgeInput:focus, #ctaTextInput:focus { border-color: rgba(255,255,255,0.3); }
+
+  .btn-export {
+    width: calc(100% - 32px); margin: 12px 16px; padding: 12px;
+    background: linear-gradient(135deg, #facc15, #eab308);
+    color: #000; font-size: 12px; font-weight: 800;
+    border: none; border-radius: 6px; cursor: pointer;
+    font-family: 'Inter', sans-serif; letter-spacing: 0.5px; transition: opacity 0.2s;
+  }
+  .btn-export:hover { opacity: 0.9; }
+  .btn-export:disabled { opacity: 0.5; cursor: not-allowed; }
+
+  #exportProgress { display: none; padding: 0 16px 12px; }
+  .progress-track { height: 4px; background: rgba(255,255,255,0.08); border-radius: 2px; overflow: hidden; margin-bottom: 6px; }
+  #exportBar { height: 100%; background: #4ade80; width: 0; transition: width 0.3s; border-radius: 2px; }
+  #exportLabel { font-size: 10px; color: rgba(255,255,255,0.4); }
+</style>
+</head>
+<body>
+
+<div class="canvas-wrap">
+  <div class="slide" id="slideEl">
+    <!-- Photo layer -->
+    <div class="photo-layer">
+      <img class="photo-image" id="photoImg" src="" alt="">
+    </div>
+    <div class="transparency-overlay" id="transparencyOverlay"></div>
+    <div class="overlay-darkening" id="overlayDarkening"></div>
+
+    <!-- Screenshot layer -->
+    <div class="screenshot-layer" id="screenshotLayer">
+      <img id="screenshotImage" src="" alt="">
+    </div>
+
+    <!-- Glows -->
+    <div class="glow-green"></div>
+    <div class="glow-yellow"></div>
+
+    <!-- Safe zone -->
+    <div class="safe-zone" id="safeZone"></div>
+
+    <!-- Text layer -->
+    <div class="text-layer">
+      <div class="badge">
+        <span class="badge-dot"></span>
+        <span>[BADGE_TEXT]</span>
+      </div>
+
+      <div class="headline-block">
+        <div class="divider"></div>
+        <h1 class="headline">[HEADLINE — usar <span class="accent-green">TEXTO</span> pro destaque verde]</h1>
+        <p class="sub">[SUB — usar <strong>TEXTO</strong> pro destaque amarelo]</p>
+      </div>
+
+      <div style="height: 48px;"></div>
+    </div>
+
+    <!-- CTA Bar -->
+    <div class="cta-bar" id="ctaBar">[CTA_TEXT]</div>
+  </div>
+</div>
+
+<!-- PAINEL -->
+<div id="controlPanel">
+  <div class="panel-header">
+    <h2>Painel de Controle</h2>
+    <p id="panelDim">Criativo [NN] — [SLUG] &bull; 1080&times;1350</p>
+  </div>
+
+  <!-- FORMATO -->
+  <div class="panel-group">
+    <div class="group-title">Formato</div>
+    <div class="panel-row">
+      <div class="toggle-group" id="formatToggles">
+        <button class="toggle-btn" onclick="setFormat('1:1')">1:1</button>
+        <button class="toggle-btn active" onclick="setFormat('4:5')">4:5</button>
+        <button class="toggle-btn" onclick="setFormat('9:16')">9:16</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ZONA SEGURA -->
+  <div class="panel-group">
+    <div class="group-title">Zona Segura</div>
+    <div class="panel-row">
+      <button class="toggle-btn" id="safeBtn" onclick="toggleSafe()">Mostrar</button>
+    </div>
+  </div>
+
+  <!-- FOTO DE FUNDO -->
+  <div class="panel-group">
+    <div class="group-title">Foto de Fundo</div>
+    <div class="panel-row">
+      <div class="upload-zone" id="photoUploadZone">
+        <span class="ico">+</span>
+        <p>Arraste uma foto ou clique</p>
+      </div>
+      <input type="file" id="photoFileInput" accept="image/*" style="display:none;">
+      <button class="btn-secondary" id="photoClearBtn">Limpar foto</button>
+    </div>
+    <div class="panel-row">
+      <div class="row-label">Transpar&ecirc;ncia</div>
+      <div class="slider-row">
+        <input type="range" id="opacitySlider" min="0" max="100" value="100">
+        <span class="slider-val" id="opacityValue">100%</span>
+      </div>
+    </div>
+    <div class="panel-row">
+      <div class="row-label">Escurecimento</div>
+      <div class="slider-row">
+        <input type="range" id="darkenSlider" min="0" max="100" value="50">
+        <span class="slider-val" id="darkenValue">50%</span>
+      </div>
+    </div>
+    <div class="panel-row">
+      <div class="row-label">Posi&ccedil;&atilde;o vertical</div>
+      <div class="slider-row">
+        <input type="range" id="posYSlider" min="0" max="100" value="50">
+        <span class="slider-val" id="posYValue">50%</span>
+      </div>
+    </div>
+    <div class="panel-row">
+      <div class="row-label">Posi&ccedil;&atilde;o horizontal</div>
+      <div class="slider-row">
+        <input type="range" id="posXSlider" min="0" max="100" value="50">
+        <span class="slider-val" id="posXValue">50%</span>
+      </div>
+    </div>
+    <div class="panel-row">
+      <button class="toggle-btn" id="flipBtn" onclick="toggleFlip()">Flip horizontal</button>
+    </div>
+  </div>
+
+  <!-- SCREENSHOT -->
+  <div class="panel-group">
+    <div class="group-title">Screenshot / Print</div>
+    <div class="panel-row">
+      <div class="upload-zone" id="ssUploadZone">
+        <span class="ico">+</span>
+        <p>Arraste um print ou clique</p>
+      </div>
+      <input type="file" id="ssFileInput" accept="image/*" style="display:none;">
+      <button class="btn-secondary" id="ssClearBtn">Limpar screenshot</button>
+    </div>
+    <div class="panel-row">
+      <div class="row-label">Tamanho</div>
+      <div class="slider-row">
+        <input type="range" id="ssSizeSlider" min="20" max="100" value="70">
+        <span class="slider-val" id="ssSizeValue">70%</span>
+      </div>
+    </div>
+    <div class="panel-row">
+      <div class="row-label">Posi&ccedil;&atilde;o vertical</div>
+      <div class="slider-row">
+        <input type="range" id="ssPosYSlider" min="0" max="100" value="50">
+        <span class="slider-val" id="ssPosYValue">50%</span>
+      </div>
+    </div>
+    <div class="panel-row">
+      <div class="row-label">Posi&ccedil;&atilde;o horizontal</div>
+      <div class="slider-row">
+        <input type="range" id="ssPosXSlider" min="0" max="100" value="50">
+        <span class="slider-val" id="ssPosXValue">50%</span>
+      </div>
+    </div>
+    <div class="panel-row">
+      <div class="row-label">Arredondamento</div>
+      <div class="slider-row">
+        <input type="range" id="ssRadiusSlider" min="0" max="40" value="12">
+        <span class="slider-val" id="ssRadiusValue">12px</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- TEXTOS -->
+  <div class="panel-group">
+    <div class="group-title">Textos</div>
+    <div class="panel-row">
+      <div class="row-label">Badge</div>
+      <input type="text" id="badgeInput" value="[BADGE_TEXT]">
+    </div>
+    <div class="panel-row">
+      <div class="row-label">Headline</div>
+      <textarea id="headlineInput">[HEADLINE_PLAIN]</textarea>
+    </div>
+    <div class="panel-row">
+      <div class="row-label">Destaque verde (headline)</div>
+      <input type="text" id="accentInput" value="" placeholder="Texto que fica verde">
+    </div>
+    <div class="panel-row">
+      <div class="row-label">Sub (corpo)</div>
+      <textarea id="subInput">[SUB_PLAIN]</textarea>
+    </div>
+    <div class="panel-row">
+      <div class="row-label">Destaque amarelo (sub)</div>
+      <input type="text" id="accentYellowInput" value="" placeholder="Texto que fica amarelo/bold">
+    </div>
+    <div class="panel-row">
+      <div class="row-label">Tamanho headline</div>
+      <div class="slider-row">
+        <input type="range" id="headlineSizeSlider" min="18" max="42" value="28">
+        <span class="slider-val" id="headlineSizeValue">28px</span>
+      </div>
+    </div>
+    <div class="panel-row">
+      <div class="row-label">Tamanho sub</div>
+      <div class="slider-row">
+        <input type="range" id="subSizeSlider" min="10" max="20" value="13">
+        <span class="slider-val" id="subSizeValue">13px</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- CTA BAR -->
+  <div class="panel-group" id="ctaGroup">
+    <div class="group-title">CTA BAR</div>
+    <div class="panel-row">
+      <div class="row-label">Texto</div>
+      <input type="text" id="ctaTextInput" value="[CTA_TEXT]">
+    </div>
+    <div class="panel-row">
+      <div class="row-label">Fonte</div>
+      <div class="style-toggle" id="ctaFontToggle">
+        <button class="active" data-font="'Inter', sans-serif">Inter</button>
+        <button data-font="'DM Sans', sans-serif">DM Sans</button>
+        <button data-font="'Playfair Display', serif">Playfair</button>
+      </div>
+    </div>
+    <div class="panel-row">
+      <div class="row-label">Peso</div>
+      <div class="style-toggle" id="ctaWeightToggle">
+        <button data-weight="400">Regular</button>
+        <button data-weight="600">Semibold</button>
+        <button class="active" data-weight="800">Bold</button>
+      </div>
+    </div>
+    <div class="panel-row">
+      <div class="row-label">Fundo</div>
+      <div class="style-toggle" id="ctaBgToggle">
+        <button class="active" data-bg="linear-gradient(135deg, #facc15, #eab308)" data-fg="#000">Amarelo</button>
+        <button data-bg="#fff" data-fg="#000">Branco</button>
+        <button data-bg="rgba(0,0,0,0.92)" data-fg="#fff">Escuro</button>
+        <button data-bg="#4ade80" data-fg="#000">Verde</button>
+      </div>
+    </div>
+    <div class="panel-row">
+      <div class="row-label">Tamanho</div>
+      <div class="slider-row">
+        <input type="range" id="ctaSizeSlider" min="8" max="18" value="11">
+        <span class="slider-val" id="ctaSizeValue">11px</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- EXPORT -->
+  <div class="panel-group">
+    <div class="group-title">Exportar</div>
+    <button class="btn-export" id="exportBtn" onclick="exportStatic()">Baixar PNG (1080&times;1350)</button>
+    <div id="exportProgress">
+      <div class="progress-track"><div id="exportBar"></div></div>
+      <div id="exportLabel">Preparando...</div>
+    </div>
+  </div>
+</div>
+
+<script>
+  const slide = document.getElementById('slideEl');
+  const photoImg = document.getElementById('photoImg');
+  const transparencyOverlay = document.getElementById('transparencyOverlay');
+  const overlayDarkening = document.getElementById('overlayDarkening');
+  const screenshotLayer = document.getElementById('screenshotLayer');
+  const screenshotImage = document.getElementById('screenshotImage');
+  const ctaBar = document.getElementById('ctaBar');
+  let currentFormat = '4:5';
+
+  const formatDims = {
+    '1:1': { w: 420, h: 420, label: '1080\u00d71080' },
+    '4:5': { w: 420, h: 525, label: '1080\u00d71350' },
+    '9:16': { w: 420, h: 747, label: '1080\u00d71920' }
+  };
+
+  // ── Formato ──
+  function setFormat(fmt) {
+    currentFormat = fmt;
+    const d = formatDims[fmt];
+    slide.style.height = d.h + 'px';
+    document.getElementById('panelDim').textContent = 'Criativo [NN] \u2022 ' + d.label;
+    document.getElementById('exportBtn').textContent = 'Baixar PNG (' + d.label + ')';
+    document.querySelectorAll('#formatToggles .toggle-btn').forEach(b => {
+      b.classList.toggle('active', b.textContent.trim() === fmt);
+    });
+  }
+
+  // ── Zona segura ──
+  let safeOn = false;
+  function toggleSafe() {
+    safeOn = !safeOn;
+    document.getElementById('safeZone').style.display = safeOn ? 'block' : 'none';
+    document.getElementById('safeBtn').textContent = safeOn ? 'Ocultar' : 'Mostrar';
+    document.getElementById('safeBtn').classList.toggle('active', safeOn);
+  }
+
+  // ── Photo upload ──
+  const photoUploadZone = document.getElementById('photoUploadZone');
+  const photoFileInput = document.getElementById('photoFileInput');
+
+  photoUploadZone.addEventListener('click', () => photoFileInput.click());
+  photoFileInput.addEventListener('change', e => { if (e.target.files[0]) loadPhoto(e.target.files[0]); });
+  photoUploadZone.addEventListener('dragover', e => { e.preventDefault(); photoUploadZone.classList.add('dragover'); });
+  photoUploadZone.addEventListener('dragleave', () => photoUploadZone.classList.remove('dragover'));
+  photoUploadZone.addEventListener('drop', e => {
+    e.preventDefault(); photoUploadZone.classList.remove('dragover');
+    if (e.dataTransfer.files[0] && e.dataTransfer.files[0].type.startsWith('image/')) loadPhoto(e.dataTransfer.files[0]);
+  });
+
+  function loadPhoto(file) {
+    const reader = new FileReader();
+    reader.onload = e => { photoImg.src = e.target.result; photoImg.classList.add('active'); };
+    reader.readAsDataURL(file);
+  }
+
+  document.getElementById('photoClearBtn').addEventListener('click', () => {
+    photoImg.src = ''; photoImg.classList.remove('active'); photoFileInput.value = '';
+  });
+
+  // ── Photo controls ──
+  document.getElementById('opacitySlider').addEventListener('input', e => {
+    const val = parseInt(e.target.value);
+    document.getElementById('opacityValue').textContent = val + '%';
+    transparencyOverlay.style.opacity = 1 - (val / 100);
+  });
+
+  document.getElementById('darkenSlider').addEventListener('input', e => {
+    const val = e.target.value;
+    document.getElementById('darkenValue').textContent = val + '%';
+    const m = val * 0.007;
+    overlayDarkening.style.background = 'linear-gradient(180deg, rgba(0,0,0,' + (m*0.15) + ') 0%, rgba(0,0,0,' + (m*0.5) + ') 40%, rgba(0,0,0,' + m + ') 100%)';
+  });
+
+  document.getElementById('posYSlider').addEventListener('input', e => {
+    document.getElementById('posYValue').textContent = e.target.value + '%';
+    photoImg.style.objectPosition = document.getElementById('posXSlider').value + '% ' + e.target.value + '%';
+  });
+
+  document.getElementById('posXSlider').addEventListener('input', e => {
+    document.getElementById('posXValue').textContent = e.target.value + '%';
+    photoImg.style.objectPosition = e.target.value + '% ' + document.getElementById('posYSlider').value + '%';
+  });
+
+  function toggleFlip() {
+    photoImg.classList.toggle('flipped');
+    document.getElementById('flipBtn').classList.toggle('active');
+  }
+
+  // ── Screenshot upload ──
+  const ssUploadZone = document.getElementById('ssUploadZone');
+  const ssFileInput = document.getElementById('ssFileInput');
+
+  ssUploadZone.addEventListener('click', () => ssFileInput.click());
+  ssFileInput.addEventListener('change', e => { if (e.target.files[0]) loadScreenshot(e.target.files[0]); });
+  ssUploadZone.addEventListener('dragover', e => { e.preventDefault(); ssUploadZone.classList.add('dragover'); });
+  ssUploadZone.addEventListener('dragleave', () => ssUploadZone.classList.remove('dragover'));
+  ssUploadZone.addEventListener('drop', e => {
+    e.preventDefault(); ssUploadZone.classList.remove('dragover');
+    if (e.dataTransfer.files[0] && e.dataTransfer.files[0].type.startsWith('image/')) loadScreenshot(e.dataTransfer.files[0]);
+  });
+
+  function loadScreenshot(file) {
+    const reader = new FileReader();
+    reader.onload = e => { screenshotImage.src = e.target.result; screenshotLayer.classList.add('active'); };
+    reader.readAsDataURL(file);
+  }
+
+  document.getElementById('ssClearBtn').addEventListener('click', () => {
+    screenshotImage.src = ''; screenshotLayer.classList.remove('active'); ssFileInput.value = '';
+  });
+
+  // ── Screenshot controls ──
+  document.getElementById('ssSizeSlider').addEventListener('input', e => {
+    document.getElementById('ssSizeValue').textContent = e.target.value + '%';
+    screenshotLayer.style.width = e.target.value + '%';
+  });
+  document.getElementById('ssPosYSlider').addEventListener('input', e => {
+    document.getElementById('ssPosYValue').textContent = e.target.value + '%';
+    screenshotLayer.style.top = e.target.value + '%';
+  });
+  document.getElementById('ssPosXSlider').addEventListener('input', e => {
+    document.getElementById('ssPosXValue').textContent = e.target.value + '%';
+    screenshotLayer.style.left = e.target.value + '%';
+  });
+  document.getElementById('ssRadiusSlider').addEventListener('input', e => {
+    document.getElementById('ssRadiusValue').textContent = e.target.value + 'px';
+    screenshotLayer.style.borderRadius = e.target.value + 'px';
+  });
+
+  // ── Text controls ──
+  const headlineEl = document.querySelector('.headline');
+  const subEl = document.querySelector('.sub');
+  const badgeText = document.querySelector('.badge span:last-child');
+
+  document.getElementById('badgeInput').addEventListener('input', e => {
+    badgeText.textContent = e.target.value;
+  });
+
+  function updateHeadline() {
+    let text = document.getElementById('headlineInput').value;
+    const accent = document.getElementById('accentInput').value.trim();
+    if (accent && text.includes(accent)) {
+      text = text.replace(accent, '<span class="accent-green">' + accent + '</span>');
+    }
+    headlineEl.innerHTML = text;
+  }
+
+  document.getElementById('headlineInput').addEventListener('input', updateHeadline);
+  document.getElementById('accentInput').addEventListener('input', updateHeadline);
+
+  function updateSub() {
+    let text = document.getElementById('subInput').value;
+    const accent = document.getElementById('accentYellowInput').value.trim();
+    if (accent && text.includes(accent)) {
+      text = text.replace(accent, '<strong>' + accent + '</strong>');
+    }
+    subEl.innerHTML = text;
+  }
+
+  document.getElementById('subInput').addEventListener('input', updateSub);
+  document.getElementById('accentYellowInput').addEventListener('input', updateSub);
+
+  document.getElementById('headlineSizeSlider').addEventListener('input', e => {
+    document.getElementById('headlineSizeValue').textContent = e.target.value + 'px';
+    headlineEl.style.fontSize = e.target.value + 'px';
+    updateSliderFill(e.target);
+  });
+
+  document.getElementById('subSizeSlider').addEventListener('input', e => {
+    document.getElementById('subSizeValue').textContent = e.target.value + 'px';
+    subEl.style.fontSize = e.target.value + 'px';
+    updateSliderFill(e.target);
+  });
+
+  // ── CTA Bar controls ──
+  document.getElementById('ctaTextInput').addEventListener('input', e => {
+    ctaBar.textContent = e.target.value;
+  });
+
+  document.getElementById('ctaFontToggle').addEventListener('click', e => {
+    const btn = e.target.closest('button');
+    if (!btn) return;
+    document.querySelectorAll('#ctaFontToggle button').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    ctaBar.style.fontFamily = btn.dataset.font;
+  });
+
+  document.getElementById('ctaWeightToggle').addEventListener('click', e => {
+    const btn = e.target.closest('button');
+    if (!btn) return;
+    document.querySelectorAll('#ctaWeightToggle button').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    ctaBar.style.fontWeight = btn.dataset.weight;
+  });
+
+  document.getElementById('ctaBgToggle').addEventListener('click', e => {
+    const btn = e.target.closest('button');
+    if (!btn) return;
+    document.querySelectorAll('#ctaBgToggle button').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    ctaBar.style.background = btn.dataset.bg;
+    ctaBar.style.color = btn.dataset.fg;
+  });
+
+  document.getElementById('ctaSizeSlider').addEventListener('input', e => {
+    document.getElementById('ctaSizeValue').textContent = e.target.value + 'px';
+    ctaBar.style.fontSize = e.target.value + 'px';
+    updateSliderFill(e.target);
+  });
+
+  // ── Slider fill ──
+  function updateSliderFill(slider) {
+    const min = parseFloat(slider.min), max = parseFloat(slider.max), val = parseFloat(slider.value);
+    const pct = ((val - min) / (max - min)) * 100;
+    slider.style.background = 'linear-gradient(to right, rgba(255,255,255,0.5) 0%, rgba(255,255,255,0.5) ' + pct + '%, rgba(255,255,255,0.1) ' + pct + '%)';
+  }
+  document.querySelectorAll('input[type="range"]').forEach(s => {
+    updateSliderFill(s);
+    s.addEventListener('input', () => updateSliderFill(s));
+  });
+
+  // ── fixObjectFitForExport ──
+  function fixObjectFitForExport(clone, W, H) {
+    const img = clone.querySelector('.photo-image');
+    if (!img || !img.src || !img.classList.contains('active')) return;
+    const nW = img.naturalWidth, nH = img.naturalHeight;
+    if (!nW || !nH) return;
+    const cR = W / H, iR = nW / nH;
+    let drawW, drawH;
+    if (iR > cR) { drawH = H; drawW = H * iR; } else { drawW = W; drawH = W / iR; }
+    const objPos = img.style.objectPosition || '50% 50%';
+    const parts = objPos.match(/([\d.]+)%/g) || ['50%', '50%'];
+    const pX = parseFloat(parts[0]) / 100;
+    const pY = parts[1] ? parseFloat(parts[1]) / 100 : 0.5;
+    img.style.objectFit = 'none'; img.style.objectPosition = '';
+    img.style.width = drawW + 'px'; img.style.height = drawH + 'px';
+    img.style.left = -(drawW - W) * pX + 'px'; img.style.top = -(drawH - H) * pY + 'px';
+    if (img.classList.contains('flipped')) { img.classList.remove('flipped'); img.style.transform = 'scaleX(-1)'; }
+  }
+
+  // ── Export PNG ──
+  async function exportStatic() {
+    const btn = document.getElementById('exportBtn');
+    const progress = document.getElementById('exportProgress');
+    const bar = document.getElementById('exportBar');
+    const label = document.getElementById('exportLabel');
+
+    btn.disabled = true; btn.textContent = 'Exportando...';
+    progress.style.display = 'block'; bar.style.width = '30%'; label.textContent = 'Renderizando...';
+
+    const W = slide.offsetWidth, H = slide.offsetHeight;
+    const scale = 1080 / W;
+
+    const sz = document.getElementById('safeZone');
+    const szWas = sz.style.display;
+    sz.style.display = 'none';
+
+    const offscreen = document.createElement('div');
+    offscreen.style.cssText = 'position:fixed;left:-9999px;top:0;width:' + W + 'px;height:' + H + 'px;overflow:hidden;z-index:99999;';
+    document.body.appendChild(offscreen);
+
+    const clone = slide.cloneNode(true);
+    clone.style.cssText = 'width:' + W + 'px;min-width:' + W + 'px;height:' + H + 'px;position:relative;display:flex;flex-direction:column;overflow:hidden;';
+    offscreen.appendChild(clone);
+
+    fixObjectFitForExport(clone, W, H);
+
+    await new Promise(r => setTimeout(r, 300));
+    bar.style.width = '60%';
+
+    try {
+      const canvas = await html2canvas(offscreen, {
+        width: W, height: H, scale: scale,
+        useCORS: true, allowTaint: true,
+        backgroundColor: '#0a0a0a',
+        logging: false, scrollX: 0, scrollY: 0,
+        windowWidth: W, windowHeight: H,
+      });
+      bar.style.width = '90%';
+      canvas.toBlob(blob => {
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'turbo-criativo-[NN]-[SLUG]-' + currentFormat.replace(':','-') + '.png';
+        document.body.appendChild(a); a.click(); document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+        bar.style.width = '100%'; label.textContent = 'Download conclu\u00eddo!';
+        setTimeout(() => { progress.style.display = 'none'; }, 3000);
+      }, 'image/png', 1.0);
+    } catch(err) {
+      console.error(err); label.textContent = 'Erro — veja F12';
+    }
+
+    document.body.removeChild(offscreen);
+    sz.style.display = szWas;
+    btn.disabled = false;
+    const d = formatDims[currentFormat];
+    btn.textContent = 'Baixar PNG (' + d.label + ')';
+  }
+</script>
+</body>
+</html>

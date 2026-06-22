@@ -1,0 +1,1976 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Universal Instagram Template</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700;800&family=DM+Sans:wght@400;500;600;700&family=Inter:wght@400;500;600;700;800&family=Merriweather:wght@400;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --brand-primary: #F5C518;
+      --brand-dark: #1A1918;
+      --heading-font: 'Playfair Display', serif;
+      --body-font: 'DM Sans', sans-serif;
+      --bg: #000000;
+      --text-primary: #FFFFFF;
+      --text-accent: #DAA520;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      background: #0a0a0a;
+      font-family: 'Inter', sans-serif;
+      display: flex;
+      min-height: 100vh;
+    }
+
+    .main-content {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+      margin-right: 300px;
+    }
+
+    .slide-wrapper {
+      width: 420px;
+      height: 525px;
+      position: relative;
+      overflow: hidden;
+      border-radius: 12px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+    }
+
+    .slide {
+      width: 420px;
+      min-width: 420px;
+      height: 100%;
+      position: absolute;
+      top: 0;
+      left: 0;
+      display: none;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    .slide.active {
+      display: flex;
+    }
+
+    /* Photo model styles */
+    .photo-layer {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+      z-index: 1;
+    }
+
+    .photo-layer::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at 50% 35%, rgba(60,55,45,0.5) 0%, transparent 60%),
+        linear-gradient(180deg, rgba(30,28,25,1) 0%, rgba(20,18,15,1) 100%);
+      z-index: 0;
+    }
+
+    .photo-image {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center 50%;
+      z-index: 1;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .photo-image.active {
+      opacity: 1;
+      z-index: 3;
+    }
+
+    .photo-image.flipped {
+      transform: scaleX(-1);
+    }
+
+    .transparency-overlay {
+      position: absolute;
+      inset: 0;
+      background: #000;
+      opacity: 0;
+      z-index: 4;
+      pointer-events: none;
+    }
+
+    .overlay-darkening {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0.15) 40%, rgba(0,0,0,0.45) 100%);
+      z-index: 6;
+      pointer-events: none;
+    }
+
+    .screenshot-layer {
+      position: absolute;
+      z-index: 8;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 70%;
+      overflow: hidden;
+      border-radius: 12px;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.5);
+      display: none;
+      pointer-events: none;
+    }
+
+    .screenshot-layer img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    .screenshot-layer.active {
+      display: block;
+    }
+
+    .text-layer {
+      position: absolute;
+      inset: 0;
+      z-index: 10;
+      pointer-events: none;
+    }
+
+    .text-layer > * {
+      pointer-events: auto;
+    }
+
+    .face-spacer {
+      display: none; /* não precisa mais — posição agora é absoluta via slider */
+    }
+
+    .tag-label {
+      font-family: 'Merriweather', serif;
+      font-size: 13px;
+      font-weight: 400;
+      letter-spacing: 0.3px;
+      white-space: nowrap;
+      background: #fff;
+      color: #000;
+      padding: 4px 10px;
+      border-radius: 4px;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+
+    .tag-label.tag-box {
+      background: #fff;
+      color: #000;
+      padding: 4px 10px;
+      border-radius: 4px;
+      text-shadow: none;
+    }
+
+    .tag-label.tag-box-dark {
+      background: rgba(0,0,0,0.92);
+      color: #fff;
+      padding: 4px 10px;
+      border-radius: 4px;
+      text-shadow: none;
+    }
+
+    .tag-label.tag-text {
+      background: transparent;
+      color: #fff;
+      padding: 0;
+      text-shadow: 0 1px 6px rgba(0,0,0,0.6), 0 2px 20px rgba(0,0,0,0.4);
+    }
+
+    .highlight-box {
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      top: 55%;
+      display: inline-block;
+      background: var(--brand-primary);
+      padding: 3px 10px;
+      text-align: center;
+      max-width: 88%;
+    }
+
+    .highlight-box p {
+      font-family: var(--heading-font);
+      font-size: 21px;
+      font-weight: 700;
+      color: #fff;
+      line-height: 1.25;
+      margin: 0;
+    }
+
+    .content-box {
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      top: 70%;
+      background: #FFFFFF;
+      padding: 4px 8px;
+      text-align: center;
+      max-width: 92%;
+      width: 92%;
+      border: 1.5px solid #1A1918;
+    }
+
+    .content-box p {
+      font-family: var(--heading-font);
+      font-size: 19px;
+      font-weight: 600;
+      color: var(--brand-dark);
+      line-height: 1.3;
+      margin: 0;
+    }
+
+    .no-box {
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      top: 70%;
+      background: none;
+      border: none;
+      padding: 4px 8px;
+      text-align: center;
+      max-width: 92%;
+      width: 92%;
+    }
+
+    .no-box p {
+      font-family: var(--heading-font);
+      font-size: 19px;
+      font-weight: 600;
+      color: #fff;
+      line-height: 1.3;
+      margin: 0;
+      text-shadow: 0 2px 8px rgba(0,0,0,0.6);
+    }
+
+    .cta-price {
+      margin-top: 16px;
+      text-align: center;
+    }
+
+    .cta-price-main {
+      font-family: var(--heading-font);
+      font-size: 42px;
+      font-weight: 800;
+      color: #fff;
+      text-shadow: 0 2px 12px rgba(0,0,0,0.6);
+      margin: 0;
+    }
+
+    .cta-price-sub {
+      font-family: var(--body-font);
+      font-size: 14px;
+      color: rgba(255,255,255,0.8);
+      margin-top: 4px;
+      text-shadow: 0 1px 4px rgba(0,0,0,0.6);
+    }
+
+    .cta-button {
+      margin-top: 16px;
+      background: #fff;
+      color: var(--brand-dark);
+      padding: 10px 28px;
+      border-radius: 6px;
+      font-family: var(--body-font);
+      font-size: 14px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      text-align: center;
+      display: inline-block;
+    }
+
+    /* Design model styles */
+    .slide[data-model="design"] {
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    .bg-dark {
+      background: var(--brand-dark);
+      color: #fff;
+    }
+
+    .bg-light {
+      background: #FAF7F4;
+      color: var(--brand-dark);
+    }
+
+    .bg-brand {
+      background: var(--brand-primary);
+      color: var(--brand-dark);
+    }
+
+    .slide-content-ds {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 48px 32px 64px;
+      text-align: center;
+    }
+
+    .ds-tag {
+      display: inline-block;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      padding: 4px 12px;
+      border-radius: 4px;
+      margin-bottom: 20px;
+      background: rgba(255,255,255,0.1);
+      color: rgba(255,255,255,0.6);
+    }
+
+    .ds-body h2 {
+      font-family: var(--heading-font);
+      font-size: 28px;
+      font-weight: 700;
+      line-height: 1.2;
+      margin: 0 0 12px;
+    }
+
+    .ds-body .ds-sub {
+      font-family: var(--body-font);
+      font-size: 16px;
+      font-weight: 400;
+      line-height: 1.5;
+      opacity: 0.7;
+      margin: 0;
+    }
+
+    /* Texto-puro model styles */
+    .slide[data-model="texto-puro"] {
+      background: #000;
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      padding: 40px 32px;
+    }
+
+    .text-content {
+      max-width: 100%;
+    }
+
+    .text-content p {
+      font-family: 'Inter', sans-serif;
+      font-size: 24px;
+      font-weight: 800;
+      color: #fff;
+      line-height: 1.3;
+      margin: 0 0 16px 0;
+      text-align: left;
+    }
+
+    .text-content p:last-child {
+      margin-bottom: 0;
+    }
+
+    .text-content p.accent {
+      color: var(--text-accent);
+    }
+
+    /* Safe zone */
+    .safe-zone {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      pointer-events: none;
+      z-index: 50;
+      display: none;
+    }
+
+    .safe-zone.visible {
+      display: block;
+    }
+
+    .safe-zone-top {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 5%;
+      background: rgba(255,0,0,0.1);
+      border-bottom: 1px dashed rgba(255,0,0,0.4);
+    }
+
+    .safe-zone-bottom {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 14%;
+      background: rgba(255,0,0,0.1);
+      border-top: 1px dashed rgba(255,0,0,0.4);
+    }
+
+    /* Nav dots */
+    .nav-dots {
+      position: absolute;
+      bottom: -24px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 6px;
+      z-index: 100;
+    }
+
+    .nav-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.2);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .nav-dot.active {
+      background: #fff;
+      transform: scale(1.3);
+    }
+
+    /* Control Panel */
+    #controlPanel {
+      position: fixed;
+      right: 0;
+      top: 0;
+      bottom: 0;
+      width: 300px;
+      background: #111;
+      border-left: 1px solid rgba(255,255,255,0.06);
+      overflow-y: auto;
+      z-index: 1000;
+      font-family: 'Inter', sans-serif;
+    }
+
+    #controlPanel::-webkit-scrollbar {
+      width: 4px;
+    }
+
+    #controlPanel::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    #controlPanel::-webkit-scrollbar-thumb {
+      background: rgba(255,255,255,0.1);
+      border-radius: 2px;
+    }
+
+    .panel-header {
+      padding: 20px 16px 16px;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+    }
+
+    .panel-header h2 {
+      font-size: 13px;
+      font-weight: 700;
+      color: #fff;
+      margin: 0;
+    }
+
+    .panel-header p {
+      font-size: 10px;
+      color: rgba(255,255,255,0.3);
+      margin-top: 2px;
+    }
+
+    .panel-group {
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+    }
+
+    .group-title {
+      padding: 14px 16px 0;
+      font-size: 11px;
+      font-weight: 700;
+      color: #fff;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+    }
+
+    .panel-row {
+      padding: 10px 16px;
+    }
+
+    .row-label {
+      font-size: 10px;
+      font-weight: 500;
+      color: rgba(255,255,255,0.4);
+      margin-bottom: 6px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .style-toggle {
+      display: flex;
+      gap: 4px;
+    }
+
+    .style-toggle button {
+      flex: 1;
+      padding: 7px 4px;
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 6px;
+      background: rgba(255,255,255,0.03);
+      color: rgba(255,255,255,0.45);
+      font-family: 'Inter', sans-serif;
+      font-size: 9px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+      text-align: center;
+      line-height: 1.3;
+    }
+
+    .style-toggle button:hover {
+      background: rgba(255,255,255,0.08);
+      color: rgba(255,255,255,0.7);
+    }
+
+    .style-toggle button.active {
+      background: #fff;
+      color: #000;
+      border-color: #fff;
+    }
+
+    .slider-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .slider-row input[type="range"] {
+      flex: 1;
+    }
+
+    .slider-val {
+      font-size: 11px;
+      font-weight: 600;
+      color: rgba(255,255,255,0.7);
+      min-width: 36px;
+      text-align: right;
+    }
+
+    input[type="range"] {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 100%;
+      height: 4px;
+      border-radius: 2px;
+      outline: none;
+      cursor: pointer;
+    }
+
+    input[type="range"]::-webkit-slider-runnable-track {
+      height: 4px;
+      border-radius: 2px;
+      background: transparent;
+    }
+
+    input[type="range"]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      background: #fff;
+      cursor: pointer;
+      margin-top: -5px;
+      border: none;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.4);
+    }
+
+    input[type="range"]::-moz-range-track {
+      height: 4px;
+      border-radius: 2px;
+      background: rgba(255,255,255,0.1);
+      border: none;
+    }
+
+    input[type="range"]::-moz-range-progress {
+      height: 4px;
+      border-radius: 2px;
+      background: rgba(255,255,255,0.5);
+    }
+
+    input[type="range"]::-moz-range-thumb {
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      background: #fff;
+      cursor: pointer;
+      border: none;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.4);
+    }
+
+    .upload-zone {
+      border: 2px dashed rgba(255,255,255,0.15);
+      border-radius: 8px;
+      padding: 16px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.2s;
+      background: rgba(255,255,255,0.02);
+    }
+
+    .upload-zone:hover {
+      border-color: rgba(255,255,255,0.35);
+      background: rgba(255,255,255,0.04);
+    }
+
+    .upload-zone.dragover {
+      border-color: #fff;
+      background: rgba(255,255,255,0.06);
+    }
+
+    .upload-zone p {
+      font-size: 11px;
+      color: rgba(255,255,255,0.5);
+      margin: 4px 0 0;
+    }
+
+    .upload-zone .ico {
+      font-size: 20px;
+      display: block;
+      color: rgba(255,255,255,0.3);
+    }
+
+    .nav-controls {
+      display: flex;
+      gap: 6px;
+      margin-top: 8px;
+    }
+
+    .nav-btn {
+      flex: 1;
+      padding: 6px 8px;
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 6px;
+      background: rgba(255,255,255,0.04);
+      color: rgba(255,255,255,0.6);
+      font-family: 'Inter', sans-serif;
+      font-size: 10px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+
+    .nav-btn:hover {
+      background: rgba(255,255,255,0.1);
+      color: #fff;
+    }
+
+    .slide-indicator {
+      font-size: 12px;
+      font-weight: 700;
+      color: #fff;
+      text-align: center;
+    }
+
+    .btn-secondary {
+      width: 100%;
+      padding: 8px;
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 6px;
+      background: rgba(255,255,255,0.04);
+      color: rgba(255,255,255,0.5);
+      font-family: 'Inter', sans-serif;
+      font-size: 10px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+
+    .btn-secondary:hover {
+      background: rgba(255,255,255,0.08);
+      color: #fff;
+    }
+
+    .btn-export {
+      width: 100%;
+      padding: 12px;
+      border: none;
+      border-radius: 8px;
+      background: #fff;
+      color: #000;
+      font-family: 'Inter', sans-serif;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .btn-export:hover:not(:disabled) {
+      background: #e0e0e0;
+    }
+
+    .btn-export:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    input[type="text"],
+    textarea {
+      width: 100%;
+      box-sizing: border-box;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 6px;
+      color: #fff;
+      padding: 8px 10px;
+      font-family: 'Inter', sans-serif;
+      font-size: 12px;
+      transition: border-color 0.2s;
+    }
+
+    input[type="text"]:focus,
+    textarea:focus {
+      outline: none;
+      border-color: rgba(255,255,255,0.3);
+    }
+
+    textarea {
+      resize: vertical;
+      min-height: 70px;
+      line-height: 1.4;
+    }
+
+    .photo-only.panel-hidden,
+    .design-only.panel-hidden,
+    .has-text.panel-hidden,
+    .has-box.panel-hidden,
+    .carousel-only.panel-hidden,
+    .carousel-photo-only.panel-hidden {
+      display: none !important;
+    }
+  </style>
+</head>
+<body>
+  <div class="main-content">
+    <div class="slide-wrapper">
+      <!-- SLIDES START -->
+      <div class="slide active" data-model="photo" data-name="Hook">
+        <div class="photo-layer">
+          <div class="photo-placeholder"></div>
+          <img class="photo-image" src="" alt="">
+        </div>
+        <div class="transparency-overlay"></div>
+        <div class="overlay-darkening"></div>
+        <div class="screenshot-layer"><img class="screenshot-image" src="" alt=""></div>
+        <div class="text-layer">
+          <div class="face-spacer"></div>
+          <div class="tag-label" style="display:none;">Tag aqui</div>
+          <div class="highlight-box"><p>Texto de impacto aqui</p></div>
+          <div class="content-box"><p>Texto de explicação aqui</p></div>
+        </div>
+      </div>
+
+      <div class="slide" data-model="photo" data-name="Contexto">
+        <div class="photo-layer">
+          <div class="photo-placeholder"></div>
+          <img class="photo-image" src="" alt="">
+        </div>
+        <div class="transparency-overlay"></div>
+        <div class="overlay-darkening"></div>
+        <div class="screenshot-layer"><img class="screenshot-image" src="" alt=""></div>
+        <div class="text-layer">
+          <div class="face-spacer"></div>
+          <div class="tag-label" style="display:none;">Tag aqui</div>
+          <div class="content-box"><p>Desenvolvimento do tema</p></div>
+        </div>
+      </div>
+
+      <div class="slide" data-model="photo" data-name="CTA">
+        <div class="photo-layer">
+          <div class="photo-placeholder"></div>
+          <img class="photo-image" src="" alt="">
+        </div>
+        <div class="transparency-overlay"></div>
+        <div class="overlay-darkening"></div>
+        <div class="screenshot-layer"><img class="screenshot-image" src="" alt=""></div>
+        <div class="text-layer">
+          <div class="face-spacer"></div>
+          <div class="tag-label" style="display:none;"></div>
+          <div class="highlight-box"><p>Comenta PALAVRA</p></div>
+          <div class="content-box">
+            <p>Texto de apoio</p>
+            <div class="cta-price" style="margin-top:16px;text-align:center;">
+              <div class="cta-price-main" style="font-family:var(--heading-font);font-size:42px;font-weight:800;color:#fff;text-shadow:0 2px 12px rgba(0,0,0,0.6);">R$68</div>
+              <div class="cta-price-sub" style="font-family:var(--body-font);font-size:14px;color:rgba(255,255,255,0.8);margin-top:4px;text-shadow:0 1px 4px rgba(0,0,0,0.6);">ou 12x R$6,58</div>
+            </div>
+            <div class="cta-button" style="margin-top:16px;background:#fff;color:var(--brand-dark);padding:10px 28px;border-radius:6px;font-family:var(--body-font);font-size:14px;font-weight:700;text-transform:uppercase;letter-spacing:1px;text-align:center;">Toque em Saiba Mais</div>
+          </div>
+        </div>
+      </div>
+      <!-- SLIDES END -->
+
+      <div class="safe-zone" id="safeZone">
+        <div class="safe-zone-top"></div>
+        <div class="safe-zone-bottom"></div>
+      </div>
+      <div class="nav-dots" id="navDots"></div>
+    </div>
+  </div>
+
+  <div id="controlPanel">
+    <div class="panel-header">
+      <h2>Painel de Controle</h2>
+      <p id="panelDimension">Ajuste e exporte • 1080×1350px</p>
+    </div>
+
+    <!-- [1] FORMATO — .always -->
+    <div class="panel-group always">
+      <div class="group-title">FORMATO</div>
+      <div class="panel-row">
+        <div class="style-toggle" id="formatToggle">
+          <button class="active" data-w="420" data-h="525" data-ew="1080" data-eh="1350" data-label="4:5 Feed">4:5</button>
+          <button data-w="420" data-h="420" data-ew="1080" data-eh="1080" data-label="1:1 Quadrado">1:1</button>
+          <button data-w="420" data-h="747" data-ew="1080" data-eh="1920" data-label="9:16 Stories">9:16</button>
+        </div>
+        <div style="font-size:10px;color:rgba(255,255,255,0.3);margin-top:4px;" id="formatLabel">4:5 Feed</div>
+      </div>
+    </div>
+
+    <!-- [2] NAVEGAÇÃO — .carousel-only -->
+    <div class="panel-group carousel-only">
+      <div class="group-title">NAVEGAÇÃO</div>
+      <div class="panel-row">
+        <div class="slide-indicator">
+          <span id="currentSlide">1</span> / <span id="totalSlides">3</span>
+          — <span id="slideName" style="color:rgba(255,255,255,0.5);font-size:11px;">Hook</span>
+        </div>
+        <div class="nav-controls">
+          <button class="nav-btn" onclick="prevSlide()">← Anterior</button>
+          <button class="nav-btn" onclick="nextSlide()">Próximo →</button>
+        </div>
+        <div class="nav-controls" style="margin-top:6px;">
+          <button class="nav-btn" onclick="duplicateSlide()">Duplicar</button>
+          <button class="nav-btn" onclick="moveSlide(-1)">↑ Mover</button>
+          <button class="nav-btn" onclick="moveSlide(1)">↓ Mover</button>
+        </div>
+        <div class="nav-controls" style="margin-top:6px;">
+          <button class="nav-btn" onclick="deleteSlide()" style="background:rgba(255,60,60,0.15);border-color:rgba(255,60,60,0.3);color:#ff6b6b;">Excluir slide</button>
+        </div>
+        <div class="nav-controls" style="margin-top:6px;">
+          <label style="display:flex;align-items:center;gap:6px;font-size:10px;color:rgba(255,255,255,0.5);cursor:pointer;">
+            <input type="checkbox" id="safeZoneToggle" style="accent-color:#fff;"> Zona segura
+          </label>
+        </div>
+      </div>
+    </div>
+
+    <!-- [3] FOTO — .photo-only -->
+    <div class="panel-group photo-only">
+      <div class="group-title">FOTO</div>
+      <div class="panel-row carousel-photo-only">
+        <div class="row-label">Modo</div>
+        <div class="style-toggle" id="photoModeToggle">
+          <button class="active" data-mode="global">Todas as fotos</button>
+          <button data-mode="slide">Foto por slide</button>
+        </div>
+      </div>
+      <div class="panel-row">
+        <div id="uploadZone" class="upload-zone">
+          <span class="ico">+</span>
+          <p>Arraste uma foto ou clique</p>
+        </div>
+        <input type="file" id="fileInput" accept="image/*" style="display:none;">
+        <button class="btn-secondary" id="clearBtn" style="margin-top:8px;">Limpar foto</button>
+      </div>
+      <div class="panel-row">
+        <div class="row-label">Transparência</div>
+        <div class="slider-row">
+          <input type="range" id="opacitySlider" min="0" max="100" value="100">
+          <span class="slider-val" id="opacityValue">100%</span>
+        </div>
+      </div>
+      <div class="panel-row">
+        <div class="row-label">Escurecimento</div>
+        <div class="slider-row">
+          <input type="range" id="darkenSlider" min="0" max="100" value="45">
+          <span class="slider-val" id="darkenValue">45%</span>
+        </div>
+      </div>
+      <div class="panel-row">
+        <div class="row-label">Posição vertical</div>
+        <div class="slider-row">
+          <input type="range" id="photoPosYSlider" min="0" max="100" value="50">
+          <span class="slider-val" id="photoPosYValue">50%</span>
+        </div>
+      </div>
+      <div class="panel-row">
+        <div class="row-label">Posição horizontal</div>
+        <div class="slider-row">
+          <input type="range" id="photoPosXSlider" min="0" max="100" value="50">
+          <span class="slider-val" id="photoPosXValue">50%</span>
+        </div>
+      </div>
+      <div class="panel-row">
+        <button class="btn-secondary" id="flipBtn">Espelhar foto</button>
+      </div>
+    </div>
+
+    <!-- [4] SCREENSHOT — .photo-only -->
+    <div class="panel-group photo-only">
+      <div class="group-title">SCREENSHOT</div>
+      <div class="panel-row">
+        <div id="ssUploadZone" class="upload-zone">
+          <span class="ico">+</span>
+          <p>Arraste um screenshot ou clique</p>
+        </div>
+        <input type="file" id="ssFileInput" accept="image/*" style="display:none;">
+        <button class="btn-secondary" id="ssClearBtn" style="margin-top:8px;">Limpar screenshot</button>
+      </div>
+      <div class="panel-row">
+        <div class="row-label">Tamanho</div>
+        <div class="slider-row">
+          <input type="range" id="ssSizeSlider" min="20" max="100" value="70">
+          <span class="slider-val" id="ssSizeValue">70%</span>
+        </div>
+      </div>
+      <div class="panel-row">
+        <div class="row-label">Posição vertical</div>
+        <div class="slider-row">
+          <input type="range" id="ssPosYSlider" min="0" max="100" value="50">
+          <span class="slider-val" id="ssPosYValue">50%</span>
+        </div>
+      </div>
+      <div class="panel-row">
+        <div class="row-label">Posição horizontal</div>
+        <div class="slider-row">
+          <input type="range" id="ssPosXSlider" min="0" max="100" value="50">
+          <span class="slider-val" id="ssPosXValue">50%</span>
+        </div>
+      </div>
+      <div class="panel-row">
+        <div class="row-label">Arredondamento</div>
+        <div class="slider-row">
+          <input type="range" id="ssRadiusSlider" min="0" max="40" value="12">
+          <span class="slider-val" id="ssRadiusValue">12px</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- [5] TAG LABEL — .photo-only -->
+    <div class="panel-group photo-only">
+      <div class="group-title">TAG LABEL</div>
+      <div class="panel-row">
+        <div class="row-label">Texto</div>
+        <input type="text" id="tagInput" value="" placeholder="Ex: Personal/nutri.">
+      </div>
+      <div class="panel-row">
+        <div class="row-label">Estilo</div>
+        <div class="style-toggle" id="tagStyleToggle">
+          <button class="active" data-style="tag-box">Branco</button>
+          <button data-style="tag-box-dark">Preto</button>
+          <button data-style="tag-text">Sem fundo</button>
+        </div>
+      </div>
+      <div class="panel-row">
+        <div class="row-label">Fonte</div>
+        <div class="style-toggle" id="tagFontToggle">
+          <button data-font="'Inter', sans-serif">Inter</button>
+          <button data-font="'Space Grotesk', sans-serif">Space Grotesk</button>
+          <button class="active" data-font="'Merriweather', serif">Merriweather</button>
+        </div>
+      </div>
+      <div class="panel-row">
+        <div class="row-label">Peso</div>
+        <div class="style-toggle" id="tagWeightToggle">
+          <button class="active" data-weight="400">Regular</button>
+          <button data-weight="500">Medium</button>
+          <button data-weight="700">Bold</button>
+        </div>
+      </div>
+      <div class="panel-row">
+        <div class="row-label">Tamanho</div>
+        <div class="slider-row">
+          <input type="range" id="tagSizeSlider" min="10" max="28" value="13">
+          <span class="slider-val" id="tagSizeValue">13px</span>
+        </div>
+      </div>
+      <div class="panel-row">
+        <div class="row-label">Posição vertical</div>
+        <div class="slider-row">
+          <input type="range" id="tagPosSlider" min="5" max="90" value="50">
+          <span class="slider-val" id="tagPosValue">50%</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- [6] TEXTO DE CIMA — .has-text -->
+    <div class="panel-group has-text">
+      <div class="group-title" id="text1Title">TEXTO DE CIMA</div>
+      <div class="panel-row">
+        <div class="row-label">Conteúdo</div>
+        <textarea id="text1Input" rows="3" placeholder="Texto do slide"></textarea>
+      </div>
+      <div class="panel-row">
+        <div class="row-label">Fonte</div>
+        <div class="style-toggle" id="text1FontToggle">
+          <button class="active" data-font="'Playfair Display', serif">Playfair</button>
+          <button data-font="'DM Sans', sans-serif">DM Sans</button>
+          <button data-font="'Inter', sans-serif">Inter</button>
+        </div>
+      </div>
+      <div class="panel-row">
+        <div class="row-label">Peso</div>
+        <div class="style-toggle" id="text1WeightToggle">
+          <button data-weight="400">Regular</button>
+          <button data-weight="500">Medium</button>
+          <button data-weight="600">Semibold</button>
+          <button class="active" data-weight="700">Bold</button>
+        </div>
+      </div>
+      <div class="panel-row">
+        <div class="row-label">Fundo</div>
+        <div class="style-toggle" id="text1BoxToggle">
+          <button data-bg="#fff" data-fg="#1A1918">Branco</button>
+          <button data-bg="rgba(0,0,0,0.92)" data-fg="#fff">Escuro</button>
+          <button data-bg="var(--brand-primary)" data-fg="#fff">Dourado</button>
+          <button data-bg="none" data-fg="#fff" data-noborder="true">Sem borda</button>
+        </div>
+      </div>
+      <div class="panel-row">
+        <div class="row-label">Tamanho</div>
+        <div class="slider-row">
+          <input type="range" id="text1SizeSlider" min="12" max="48" value="21">
+          <span class="slider-val" id="text1SizeValue">21px</span>
+        </div>
+      </div>
+      <div class="panel-row">
+        <div class="row-label">Posição vertical</div>
+        <div class="slider-row">
+          <input type="range" id="text1PosYSlider" min="5" max="90" value="55">
+          <span class="slider-val" id="text1PosYValue">55%</span>
+        </div>
+      </div>
+      <div class="panel-row">
+        <div class="row-label">Posição horizontal</div>
+        <div class="slider-row">
+          <input type="range" id="text1PosXSlider" min="5" max="95" value="50">
+          <span class="slider-val" id="text1PosXValue">50%</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- [7] TEXTO DE BAIXO — .has-text -->
+    <div class="panel-group has-text">
+      <div class="group-title" id="text2Title">TEXTO DE BAIXO</div>
+      <div class="panel-row">
+        <div class="row-label">Conteúdo</div>
+        <textarea id="text2Input" rows="3" placeholder="Texto do slide"></textarea>
+      </div>
+      <div class="panel-row">
+        <div class="row-label">Fonte</div>
+        <div class="style-toggle" id="text2FontToggle">
+          <button class="active" data-font="'Playfair Display', serif">Playfair</button>
+          <button data-font="'DM Sans', sans-serif">DM Sans</button>
+          <button data-font="'Inter', sans-serif">Inter</button>
+        </div>
+      </div>
+      <div class="panel-row">
+        <div class="row-label">Peso</div>
+        <div class="style-toggle" id="text2WeightToggle">
+          <button data-weight="400">Regular</button>
+          <button data-weight="500">Medium</button>
+          <button data-weight="600">Semibold</button>
+          <button class="active" data-weight="700">Bold</button>
+        </div>
+      </div>
+      <div class="panel-row">
+        <div class="row-label">Fundo</div>
+        <div class="style-toggle" id="text2BoxToggle">
+          <button data-bg="#fff" data-fg="#1A1918">Branco</button>
+          <button data-bg="rgba(0,0,0,0.92)" data-fg="#fff">Escuro</button>
+          <button data-bg="var(--brand-primary)" data-fg="#fff">Dourado</button>
+          <button data-bg="none" data-fg="#fff" data-noborder="true">Sem borda</button>
+        </div>
+      </div>
+      <div class="panel-row">
+        <div class="row-label">Tamanho</div>
+        <div class="slider-row">
+          <input type="range" id="text2SizeSlider" min="12" max="48" value="19">
+          <span class="slider-val" id="text2SizeValue">19px</span>
+        </div>
+      </div>
+      <div class="panel-row">
+        <div class="row-label">Posição vertical</div>
+        <div class="slider-row">
+          <input type="range" id="text2PosYSlider" min="5" max="90" value="70">
+          <span class="slider-val" id="text2PosYValue">70%</span>
+        </div>
+      </div>
+      <div class="panel-row">
+        <div class="row-label">Posição horizontal</div>
+        <div class="slider-row">
+          <input type="range" id="text2PosXSlider" min="5" max="95" value="50">
+          <span class="slider-val" id="text2PosXValue">50%</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- [8] CTA — .cta-only -->
+    <div class="panel-group cta-only" id="ctaGroup" style="display:none;">
+      <div class="group-title">CTA</div>
+      <div class="panel-row">
+        <div class="row-label">Preço</div>
+        <input type="text" id="ctaPriceInput" value="R$68">
+      </div>
+      <div class="panel-row">
+        <div class="row-label">Parcelamento</div>
+        <input type="text" id="ctaSubInput" value="ou 12x R$6,58">
+      </div>
+      <div class="panel-row">
+        <div class="row-label">Botão</div>
+        <input type="text" id="ctaButtonInput" value="Toque em Saiba Mais">
+      </div>
+      <div class="panel-row">
+        <div class="row-label">Tamanho do preço</div>
+        <div class="slider-row">
+          <input type="range" id="ctaPriceSizeSlider" min="24" max="64" value="42">
+          <span class="slider-val" id="ctaPriceSizeValue">42px</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- [9] FUNDO DO SLIDE — .design-only -->
+    <div class="panel-group design-only">
+      <div class="group-title">FUNDO DO SLIDE</div>
+      <div class="panel-row">
+        <div class="style-toggle" id="bgToggle">
+          <button class="active" data-bg-class="bg-dark">Escuro</button>
+          <button data-bg-class="bg-light">Claro</button>
+          <button data-bg-class="bg-brand">Marca</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- [10] CANTOS — .has-box -->
+    <div class="panel-group has-box">
+      <div class="group-title">CANTOS</div>
+      <div class="panel-row">
+        <div class="style-toggle" id="cornersToggle">
+          <button data-radius="0">Retos</button>
+          <button class="active" data-radius="4">Arredondados</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- [11] EXPORTAR — .always -->
+    <div class="panel-group always">
+      <div class="group-title">EXPORTAR</div>
+      <div class="panel-row">
+        <button class="btn-export" id="exportCurrentBtn" onclick="exportCurrentSlide()">Baixar Slide Atual (PNG)</button>
+      </div>
+      <div class="panel-row carousel-only">
+        <button class="btn-export" id="exportBtn" onclick="exportAllSlides()">Baixar Todos (ZIP)</button>
+      </div>
+      <div id="exportProgress" style="display:none;padding:0 16px 10px;">
+        <div style="background:rgba(255,255,255,0.1);border-radius:4px;height:6px;overflow:hidden;">
+          <div id="exportBar" style="height:100%;background:#fff;width:0%;transition:width 0.3s;border-radius:4px;"></div>
+        </div>
+        <div id="exportLabel" style="font-size:10px;color:rgba(255,255,255,0.4);margin-top:4px;text-align:center;"></div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+  <script>
+    let slides = document.querySelectorAll('.slide');
+    let currentIndex = 0;
+    let exportW = 420, exportH = 525, exportScaleW = 1080, exportScaleH = 1350;
+    let photoMode = 'global';
+
+    // Slider fill function
+    function updateSliderFill(slider) {
+      const min = parseFloat(slider.min);
+      const max = parseFloat(slider.max);
+      const val = parseFloat(slider.value);
+      const pct = ((val - min) / (max - min)) * 100;
+      slider.style.background = `linear-gradient(to right, rgba(255,255,255,0.5) 0%, rgba(255,255,255,0.5) ${pct}%, rgba(255,255,255,0.1) ${pct}%)`;
+    }
+
+    document.querySelectorAll('input[type="range"]').forEach(s => {
+      updateSliderFill(s);
+      s.addEventListener('input', () => updateSliderFill(s));
+    });
+
+    // Format toggle
+    document.getElementById('formatToggle').addEventListener('click', e => {
+      const btn = e.target.closest('button');
+      if (!btn) return;
+      document.querySelectorAll('#formatToggle button').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      exportW = parseInt(btn.dataset.w);
+      exportH = parseInt(btn.dataset.h);
+      exportScaleW = parseInt(btn.dataset.ew);
+      exportScaleH = parseInt(btn.dataset.eh);
+      document.querySelector('.slide-wrapper').style.width = exportW + 'px';
+      document.querySelector('.slide-wrapper').style.height = exportH + 'px';
+      slides.forEach(s => {
+        s.style.width = exportW + 'px';
+        s.style.height = exportH + 'px';
+      });
+      document.getElementById('formatLabel').textContent = btn.dataset.label;
+      document.getElementById('panelDimension').textContent = 'Ajuste e exporte • ' + exportScaleW + '×' + exportScaleH + 'px';
+    });
+
+    // Slide navigation
+    function refreshSlides() {
+      slides = document.querySelectorAll('.slide');
+      document.getElementById('totalSlides').textContent = slides.length;
+    }
+
+    function showSlide(idx) {
+      slides.forEach((s, i) => s.classList.toggle('active', i === idx));
+      currentIndex = idx;
+      document.getElementById('currentSlide').textContent = idx + 1;
+      document.getElementById('slideName').textContent = slides[idx].dataset.name || '';
+      syncPanel();
+      updateDots();
+      toggleModelControls();
+    }
+
+    function nextSlide() {
+      showSlide((currentIndex + 1) % slides.length);
+    }
+
+    function prevSlide() {
+      showSlide((currentIndex - 1 + slides.length) % slides.length);
+    }
+
+    function duplicateSlide() {
+      const current = slides[currentIndex];
+      const clone = current.cloneNode(true);
+      clone.classList.remove('active');
+      clone.dataset.name = current.dataset.name + ' (cópia)';
+      current.after(clone);
+      refreshSlides();
+      recreateDots();
+      showSlide(currentIndex + 1);
+    }
+
+    function moveSlide(dir) {
+      const wrapper = document.querySelector('.slide-wrapper');
+      const current = slides[currentIndex];
+      const newIdx = currentIndex + dir;
+      if (newIdx < 0 || newIdx >= slides.length) return;
+      const target = slides[newIdx];
+      if (dir === -1) wrapper.insertBefore(current, target);
+      else wrapper.insertBefore(target, current);
+      refreshSlides();
+      currentIndex = newIdx;
+      showSlide(currentIndex);
+    }
+
+    function deleteSlide() {
+      if (slides.length <= 1) return;
+      slides[currentIndex].remove();
+      refreshSlides();
+      if (currentIndex >= slides.length) currentIndex = slides.length - 1;
+      recreateDots();
+      showSlide(currentIndex);
+    }
+
+    // Nav dots
+    function recreateDots() {
+      const c = document.getElementById('navDots');
+      c.innerHTML = '';
+      for (let i = 0; i < slides.length; i++) {
+        const d = document.createElement('div');
+        d.className = 'nav-dot' + (i === currentIndex ? ' active' : '');
+        d.onclick = () => showSlide(i);
+        c.appendChild(d);
+      }
+    }
+
+    function updateDots() {
+      document.querySelectorAll('.nav-dot').forEach((d, i) => d.classList.toggle('active', i === currentIndex));
+    }
+
+    // Keyboard nav
+    document.addEventListener('keydown', e => {
+      if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+      if (e.key === 'ArrowLeft') prevSlide();
+      if (e.key === 'ArrowRight') nextSlide();
+    });
+
+    // Panel visibility - toggleModelControls
+    function toggleModelControls() {
+      const model = slides[currentIndex].dataset.model;
+      const isCTA = slides[currentIndex].dataset.name === 'CTA';
+      const isCarousel = slides.length > 1;
+
+      const showPhoto = (model === 'photo' || model === 'story-lifestyle');
+      document.querySelectorAll('.photo-only').forEach(g => g.classList.toggle('panel-hidden', !showPhoto));
+
+      document.querySelectorAll('.design-only').forEach(g => g.classList.toggle('panel-hidden', model !== 'design'));
+
+      const showText = model !== 'texto-puro';
+      document.querySelectorAll('.has-text').forEach(g => g.classList.toggle('panel-hidden', !showText));
+      document.querySelectorAll('.has-box').forEach(g => g.classList.toggle('panel-hidden', !showText));
+
+      document.getElementById('ctaGroup').style.display = isCTA ? '' : 'none';
+
+      document.querySelectorAll('.carousel-only').forEach(g => g.classList.toggle('panel-hidden', !isCarousel));
+      document.querySelectorAll('.carousel-photo-only').forEach(g => g.classList.toggle('panel-hidden', !(isCarousel && showPhoto)));
+    }
+
+    // Text mapping by DOM position
+    function getTextEl1() {
+      const s = slides[currentIndex];
+      if (s.dataset.model === 'photo' || s.dataset.model === 'story-lifestyle') {
+        const boxes = s.querySelectorAll('.text-layer > .highlight-box, .text-layer > .content-box, .text-layer > .no-box, .text-layer > .floating-text');
+        if (!boxes[0]) return null;
+        return boxes[0].querySelector('p') || boxes[0].querySelector('h2') || boxes[0];
+      }
+      if (s.dataset.model === 'design') return s.querySelector('.ds-body h2');
+      return null;
+    }
+
+    function getTextEl2() {
+      const s = slides[currentIndex];
+      if (s.dataset.model === 'photo' || s.dataset.model === 'story-lifestyle') {
+        const boxes = s.querySelectorAll('.text-layer > .highlight-box, .text-layer > .content-box, .text-layer > .no-box, .text-layer > .floating-text');
+        if (!boxes[1]) return null;
+        return boxes[1].querySelector('p') || boxes[1].querySelector('.sub') || boxes[1];
+      }
+      if (s.dataset.model === 'design') return s.querySelector('.ds-body .ds-sub');
+      return null;
+    }
+
+    function getTextBox1() {
+      const el = getTextEl1();
+      return el ? el.parentElement : null;
+    }
+
+    function getTextBox2() {
+      const el = getTextEl2();
+      return el ? el.parentElement : null;
+    }
+
+    function htmlToText(el) {
+      return el.innerHTML.replace(/<br\s*\/?>/gi, '\n').replace(/<[^>]+>/g, '');
+    }
+
+    function textToHtml(text) {
+      return text.replace(/\n/g, '<br>');
+    }
+
+    // syncPanel
+    function syncPanel() {
+      const t1 = getTextEl1(), t2 = getTextEl2();
+      document.getElementById('text1Input').value = t1 ? htmlToText(t1) : '';
+      document.getElementById('text2Input').value = t2 ? htmlToText(t2) : '';
+
+      const s = slides[currentIndex];
+      const tag = s.querySelector('.tag-label');
+      if (tag) {
+        document.getElementById('tagInput').value = tag.textContent;
+      }
+
+      const priceEl = s.querySelector('.cta-price-main');
+      const subEl = s.querySelector('.cta-price-sub');
+      const btnEl = s.querySelector('.cta-button');
+      if (priceEl) document.getElementById('ctaPriceInput').value = priceEl.textContent;
+      if (subEl) document.getElementById('ctaSubInput').value = subEl.textContent;
+      if (btnEl) document.getElementById('ctaButtonInput').value = btnEl.textContent;
+    }
+
+    // Text content sync
+    document.getElementById('text1Input').addEventListener('input', e => {
+      const el = getTextEl1();
+      if (el) el.innerHTML = textToHtml(e.target.value);
+    });
+
+    document.getElementById('text2Input').addEventListener('input', e => {
+      const el = getTextEl2();
+      if (el) el.innerHTML = textToHtml(e.target.value);
+    });
+
+    // Font toggle helper
+    function setupFontToggle(toggleId, getElement) {
+      document.getElementById(toggleId).addEventListener('click', e => {
+        const btn = e.target.closest('button');
+        if (!btn) return;
+        document.querySelectorAll('#' + toggleId + ' button').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        const el = getElement();
+        if (el) el.style.fontFamily = btn.dataset.font;
+      });
+    }
+
+    setupFontToggle('text1FontToggle', getTextEl1);
+    setupFontToggle('text2FontToggle', getTextEl2);
+
+    // Weight toggle helper
+    function setupWeightToggle(toggleId, getElement) {
+      document.getElementById(toggleId).addEventListener('click', e => {
+        const btn = e.target.closest('button');
+        if (!btn) return;
+        document.querySelectorAll('#' + toggleId + ' button').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        const el = getElement();
+        if (el) el.style.fontWeight = btn.dataset.weight;
+      });
+    }
+
+    setupWeightToggle('text1WeightToggle', getTextEl1);
+    setupWeightToggle('text2WeightToggle', getTextEl2);
+
+    // Box background toggle helper
+    function setupBoxToggle(toggleId, getElement) {
+      document.getElementById(toggleId).addEventListener('click', e => {
+        const btn = e.target.closest('button');
+        if (!btn) return;
+        document.querySelectorAll('#' + toggleId + ' button').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        const el = getElement();
+        if (!el) return;
+        const box = el.parentElement;
+        box.style.background = btn.dataset.bg;
+        el.style.color = btn.dataset.fg;
+        if (btn.dataset.noborder) {
+          box.style.border = 'none';
+          el.style.textShadow = '0 2px 8px rgba(0,0,0,0.7)';
+        } else {
+          box.style.border = '';
+          el.style.textShadow = 'none';
+        }
+      });
+    }
+
+    setupBoxToggle('text1BoxToggle', getTextEl1);
+    setupBoxToggle('text2BoxToggle', getTextEl2);
+
+    // Size sliders
+    document.getElementById('text1SizeSlider').addEventListener('input', e => {
+      document.getElementById('text1SizeValue').textContent = e.target.value + 'px';
+      const el = getTextEl1();
+      if (el) el.style.fontSize = e.target.value + 'px';
+      updateSliderFill(e.target);
+    });
+
+    document.getElementById('text2SizeSlider').addEventListener('input', e => {
+      document.getElementById('text2SizeValue').textContent = e.target.value + 'px';
+      const el = getTextEl2();
+      if (el) el.style.fontSize = e.target.value + 'px';
+      updateSliderFill(e.target);
+    });
+
+    // Position sliders — usa top/left em % (mesma mobilidade do tag label)
+    document.getElementById('text1PosYSlider').addEventListener('input', e => {
+      document.getElementById('text1PosYValue').textContent = e.target.value + '%';
+      const box = getTextBox1();
+      if (box) box.style.top = e.target.value + '%';
+      updateSliderFill(e.target);
+    });
+
+    document.getElementById('text1PosXSlider').addEventListener('input', e => {
+      document.getElementById('text1PosXValue').textContent = e.target.value + '%';
+      const box = getTextBox1();
+      if (box) box.style.left = e.target.value + '%';
+      updateSliderFill(e.target);
+    });
+
+    document.getElementById('text2PosYSlider').addEventListener('input', e => {
+      document.getElementById('text2PosYValue').textContent = e.target.value + '%';
+      const box = getTextBox2();
+      if (box) box.style.top = e.target.value + '%';
+      updateSliderFill(e.target);
+    });
+
+    document.getElementById('text2PosXSlider').addEventListener('input', e => {
+      document.getElementById('text2PosXValue').textContent = e.target.value + '%';
+      const box = getTextBox2();
+      if (box) box.style.left = e.target.value + '%';
+      updateSliderFill(e.target);
+    });
+
+    // Tag label controls
+    document.getElementById('tagInput').addEventListener('input', e => {
+      const s = slides[currentIndex];
+      const tag = s.querySelector('.tag-label');
+      if (tag) {
+        tag.textContent = e.target.value;
+        tag.style.display = e.target.value ? '' : 'none';
+      }
+    });
+
+    document.getElementById('tagStyleToggle').addEventListener('click', e => {
+      const btn = e.target.closest('button');
+      if (!btn) return;
+      document.querySelectorAll('#tagStyleToggle button').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      const tag = slides[currentIndex].querySelector('.tag-label');
+      if (!tag) return;
+      const style = btn.dataset.style;
+      tag.className = 'tag-label ' + style;
+    });
+
+    setupFontToggle('tagFontToggle', () => slides[currentIndex].querySelector('.tag-label'));
+    setupWeightToggle('tagWeightToggle', () => slides[currentIndex].querySelector('.tag-label'));
+
+    document.getElementById('tagSizeSlider').addEventListener('input', e => {
+      document.getElementById('tagSizeValue').textContent = e.target.value + 'px';
+      const tag = slides[currentIndex].querySelector('.tag-label');
+      if (tag) tag.style.fontSize = e.target.value + 'px';
+      updateSliderFill(e.target);
+    });
+
+    document.getElementById('tagPosSlider').addEventListener('input', e => {
+      document.getElementById('tagPosValue').textContent = e.target.value + '%';
+      const tag = slides[currentIndex].querySelector('.tag-label');
+      if (tag) tag.style.top = e.target.value + '%';
+      updateSliderFill(e.target);
+    });
+
+    // Photo controls
+    const uploadZone = document.getElementById('uploadZone');
+    const fileInput = document.getElementById('fileInput');
+
+    uploadZone.addEventListener('click', () => fileInput.click());
+    fileInput.addEventListener('change', e => {
+      if (e.target.files[0]) loadPhoto(e.target.files[0]);
+    });
+    uploadZone.addEventListener('dragover', e => {
+      e.preventDefault();
+      uploadZone.classList.add('dragover');
+    });
+    uploadZone.addEventListener('dragleave', () => uploadZone.classList.remove('dragover'));
+    uploadZone.addEventListener('drop', e => {
+      e.preventDefault();
+      uploadZone.classList.remove('dragover');
+      if (e.dataTransfer.files[0] && e.dataTransfer.files[0].type.startsWith('image/'))
+        loadPhoto(e.dataTransfer.files[0]);
+    });
+
+    function loadPhoto(file) {
+      const reader = new FileReader();
+      reader.onload = e => {
+        if (photoMode === 'global') {
+          document.querySelectorAll('.photo-image').forEach(img => {
+            img.src = e.target.result;
+            img.classList.add('active');
+          });
+        } else {
+          const img = slides[currentIndex].querySelector('.photo-image');
+          if (img) {
+            img.src = e.target.result;
+            img.classList.add('active');
+          }
+        }
+      };
+      reader.readAsDataURL(file);
+    }
+
+    document.getElementById('clearBtn').addEventListener('click', () => {
+      if (photoMode === 'global') {
+        document.querySelectorAll('.photo-image').forEach(img => {
+          img.src = '';
+          img.classList.remove('active');
+        });
+      } else {
+        const img = slides[currentIndex].querySelector('.photo-image');
+        if (img) {
+          img.src = '';
+          img.classList.remove('active');
+        }
+      }
+      fileInput.value = '';
+    });
+
+    document.getElementById('photoModeToggle').addEventListener('click', e => {
+      const btn = e.target.closest('button');
+      if (!btn) return;
+      document.querySelectorAll('#photoModeToggle button').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      photoMode = btn.dataset.mode;
+    });
+
+    // Transparency
+    document.getElementById('opacitySlider').addEventListener('input', e => {
+      const val = parseInt(e.target.value);
+      document.getElementById('opacityValue').textContent = val + '%';
+      const overlay = slides[currentIndex].querySelector('.transparency-overlay');
+      if (overlay) overlay.style.opacity = 1 - (val / 100);
+      updateSliderFill(e.target);
+    });
+
+    // Darkening
+    document.getElementById('darkenSlider').addEventListener('input', e => {
+      const val = e.target.value;
+      document.getElementById('darkenValue').textContent = val + '%';
+      const m = val * 0.007;
+      const overlay = slides[currentIndex].querySelector('.overlay-darkening');
+      if (overlay) {
+        overlay.style.background = `linear-gradient(180deg, rgba(0,0,0,${m*0.15}) 0%, rgba(0,0,0,${m*0.5}) 40%, rgba(0,0,0,${m}) 100%)`;
+      }
+      updateSliderFill(e.target);
+    });
+
+    // Photo position
+    document.getElementById('photoPosYSlider').addEventListener('input', e => {
+      document.getElementById('photoPosYValue').textContent = e.target.value + '%';
+      const applyTo = photoMode === 'global' ? document.querySelectorAll('.photo-image') : [slides[currentIndex].querySelector('.photo-image')];
+      applyTo.forEach(img => {
+        if (img) img.style.objectPosition = `${document.getElementById('photoPosXSlider').value}% ${e.target.value}%`;
+      });
+      updateSliderFill(e.target);
+    });
+
+    document.getElementById('photoPosXSlider').addEventListener('input', e => {
+      document.getElementById('photoPosXValue').textContent = e.target.value + '%';
+      const applyTo = photoMode === 'global' ? document.querySelectorAll('.photo-image') : [slides[currentIndex].querySelector('.photo-image')];
+      applyTo.forEach(img => {
+        if (img) img.style.objectPosition = `${e.target.value}% ${document.getElementById('photoPosYSlider').value}%`;
+      });
+      updateSliderFill(e.target);
+    });
+
+    // Flip
+    document.getElementById('flipBtn').addEventListener('click', () => {
+      const img = slides[currentIndex].querySelector('.photo-image');
+      if (img) img.classList.toggle('flipped');
+    });
+
+    // Screenshot controls
+    const ssUploadZone = document.getElementById('ssUploadZone');
+    const ssFileInput = document.getElementById('ssFileInput');
+
+    ssUploadZone.addEventListener('click', () => ssFileInput.click());
+    ssFileInput.addEventListener('change', e => {
+      if (e.target.files[0]) loadScreenshot(e.target.files[0]);
+    });
+    ssUploadZone.addEventListener('dragover', e => {
+      e.preventDefault();
+      ssUploadZone.classList.add('dragover');
+    });
+    ssUploadZone.addEventListener('dragleave', () => ssUploadZone.classList.remove('dragover'));
+    ssUploadZone.addEventListener('drop', e => {
+      e.preventDefault();
+      ssUploadZone.classList.remove('dragover');
+      if (e.dataTransfer.files[0] && e.dataTransfer.files[0].type.startsWith('image/'))
+        loadScreenshot(e.dataTransfer.files[0]);
+    });
+
+    function loadScreenshot(file) {
+      const reader = new FileReader();
+      reader.onload = e => {
+        const layer = slides[currentIndex].querySelector('.screenshot-layer');
+        const img = slides[currentIndex].querySelector('.screenshot-image');
+        if (layer && img) {
+          img.src = e.target.result;
+          layer.classList.add('active');
+        }
+      };
+      reader.readAsDataURL(file);
+    }
+
+    document.getElementById('ssClearBtn').addEventListener('click', () => {
+      const layer = slides[currentIndex].querySelector('.screenshot-layer');
+      const img = slides[currentIndex].querySelector('.screenshot-image');
+      if (layer && img) {
+        img.src = '';
+        layer.classList.remove('active');
+      }
+      ssFileInput.value = '';
+    });
+
+    document.getElementById('ssSizeSlider').addEventListener('input', e => {
+      document.getElementById('ssSizeValue').textContent = e.target.value + '%';
+      const layer = slides[currentIndex].querySelector('.screenshot-layer');
+      if (layer) layer.style.width = e.target.value + '%';
+      updateSliderFill(e.target);
+    });
+
+    document.getElementById('ssPosYSlider').addEventListener('input', e => {
+      document.getElementById('ssPosYValue').textContent = e.target.value + '%';
+      const layer = slides[currentIndex].querySelector('.screenshot-layer');
+      if (layer) layer.style.top = e.target.value + '%';
+      updateSliderFill(e.target);
+    });
+
+    document.getElementById('ssPosXSlider').addEventListener('input', e => {
+      document.getElementById('ssPosXValue').textContent = e.target.value + '%';
+      const layer = slides[currentIndex].querySelector('.screenshot-layer');
+      if (layer) layer.style.left = e.target.value + '%';
+      updateSliderFill(e.target);
+    });
+
+    document.getElementById('ssRadiusSlider').addEventListener('input', e => {
+      document.getElementById('ssRadiusValue').textContent = e.target.value + 'px';
+      const layer = slides[currentIndex].querySelector('.screenshot-layer');
+      if (layer) layer.style.borderRadius = e.target.value + 'px';
+      updateSliderFill(e.target);
+    });
+
+    // CTA controls
+    document.getElementById('ctaPriceInput').addEventListener('input', e => {
+      const el = slides[currentIndex].querySelector('.cta-price-main');
+      if (el) el.textContent = e.target.value;
+    });
+
+    document.getElementById('ctaSubInput').addEventListener('input', e => {
+      const el = slides[currentIndex].querySelector('.cta-price-sub');
+      if (el) el.textContent = e.target.value;
+    });
+
+    document.getElementById('ctaButtonInput').addEventListener('input', e => {
+      const el = slides[currentIndex].querySelector('.cta-button');
+      if (el) el.textContent = e.target.value;
+    });
+
+    document.getElementById('ctaPriceSizeSlider').addEventListener('input', e => {
+      document.getElementById('ctaPriceSizeValue').textContent = e.target.value + 'px';
+      const el = slides[currentIndex].querySelector('.cta-price-main');
+      if (el) el.style.fontSize = e.target.value + 'px';
+      updateSliderFill(e.target);
+    });
+
+    // Design model controls
+    document.getElementById('bgToggle').addEventListener('click', e => {
+      const btn = e.target.closest('button');
+      if (!btn) return;
+      document.querySelectorAll('#bgToggle button').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      const s = slides[currentIndex];
+      s.classList.remove('bg-dark', 'bg-light', 'bg-brand');
+      s.classList.add(btn.dataset.bgClass);
+    });
+
+    // Corners toggle
+    document.getElementById('cornersToggle').addEventListener('click', e => {
+      const btn = e.target.closest('button');
+      if (!btn) return;
+      document.querySelectorAll('#cornersToggle button').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      const radius = btn.dataset.radius + 'px';
+      const s = slides[currentIndex];
+      s.querySelectorAll('.highlight-box, .content-box, .no-box').forEach(box => box.style.borderRadius = radius);
+    });
+
+    // Safe zone
+    document.getElementById('safeZoneToggle').addEventListener('change', e => {
+      document.querySelectorAll('.safe-zone').forEach(sz => sz.classList.toggle('visible', e.target.checked));
+    });
+
+    // Export functions
+    function fixScreenshotForExport(clone, W, H) {
+      clone.querySelectorAll('.screenshot-layer').forEach(layer => {
+        if (!layer.classList.contains('active')) return;
+        // Convert transform: translate(-50%, -50%) to absolute positioning
+        const topPct = parseFloat(layer.style.top) || 50;
+        const leftPct = parseFloat(layer.style.left) || 50;
+        const widthPct = parseFloat(layer.style.width) || 70;
+        const layerW = W * (widthPct / 100);
+        const img = layer.querySelector('img');
+        const imgRatio = img && img.naturalWidth && img.naturalHeight ? img.naturalHeight / img.naturalWidth : 0.6;
+        const layerH = layerW * imgRatio;
+        const absTop = (H * topPct / 100) - (layerH / 2);
+        const absLeft = (W * leftPct / 100) - (layerW / 2);
+        layer.style.transform = 'none';
+        layer.style.top = absTop + 'px';
+        layer.style.left = absLeft + 'px';
+        layer.style.width = layerW + 'px';
+      });
+    }
+
+    function fixTextPositionForExport(clone, W, H) {
+      // Convert translateX(-50%) on text boxes and tags to absolute left in px
+      clone.querySelectorAll('.highlight-box, .content-box, .no-box, .tag-label').forEach(el => {
+        const leftPct = parseFloat(el.style.left) || 50;
+        const computedStyle = getComputedStyle(el);
+        const elW = el.offsetWidth || (W * 0.88);
+        const absLeft = (W * leftPct / 100) - (elW / 2);
+        el.style.transform = 'none';
+        el.style.left = absLeft + 'px';
+      });
+    }
+
+    function fixObjectFitForExport(clone, W, H) {
+      clone.querySelectorAll('.photo-image').forEach(img => {
+        if (!img.src || !img.classList.contains('active')) return;
+        const nW = img.naturalWidth, nH = img.naturalHeight;
+        if (!nW || !nH) return;
+        const cR = W / H, iR = nW / nH;
+        let drawW, drawH;
+        if (iR > cR) {
+          drawH = H;
+          drawW = H * iR;
+        } else {
+          drawW = W;
+          drawH = W / iR;
+        }
+        const objPos = img.style.objectPosition || '50% 50%';
+        const parts = objPos.match(/([\d.]+)%/g) || ['50%', '50%'];
+        const pX = parseFloat(parts[0]) / 100;
+        const pY = parts[1] ? parseFloat(parts[1]) / 100 : 0.5;
+        img.style.objectFit = 'none';
+        img.style.objectPosition = '';
+        img.style.width = drawW + 'px';
+        img.style.height = drawH + 'px';
+        img.style.left = -(drawW - W) * pX + 'px';
+        img.style.top = -(drawH - H) * pY + 'px';
+        if (img.classList.contains('flipped')) {
+          img.classList.remove('flipped');
+          img.style.transform = 'scaleX(-1)';
+        }
+      });
+    }
+
+    async function exportCurrentSlide() {
+      const btn = document.getElementById('exportCurrentBtn');
+      btn.disabled = true;
+      btn.textContent = 'Exportando...';
+
+      const W = exportW, H = exportH;
+      const scale = exportScaleW / W;
+
+      const offscreen = document.createElement('div');
+      offscreen.style.cssText = 'position:fixed;left:-9999px;top:0;width:'+W+'px;height:'+H+'px;overflow:hidden;z-index:99999;';
+      document.body.appendChild(offscreen);
+
+      const clone = slides[currentIndex].cloneNode(true);
+      clone.style.cssText = 'width:'+W+'px;min-width:'+W+'px;height:'+H+'px;position:relative;display:flex;flex-direction:column;overflow:hidden;';
+      offscreen.appendChild(clone);
+
+      fixObjectFitForExport(clone, W, H);
+      fixScreenshotForExport(clone, W, H);
+      fixTextPositionForExport(clone, W, H);
+
+      await new Promise(r => setTimeout(r, 300));
+
+      try {
+        const canvas = await html2canvas(offscreen, {
+          width: W, height: H, scale: scale,
+          useCORS: true, allowTaint: true,
+          backgroundColor: '#1A1918',
+          logging: false, scrollX: 0, scrollY: 0,
+          windowWidth: W, windowHeight: H,
+        });
+        canvas.toBlob(blob => {
+          const url = URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = 'slide_' + (currentIndex + 1) + '.png';
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
+          URL.revokeObjectURL(url);
+        }, 'image/png', 1.0);
+      } catch(err) {
+        console.error('Export error', err);
+      }
+
+      document.body.removeChild(offscreen);
+      btn.disabled = false;
+      btn.textContent = 'Baixar Slide Atual (PNG)';
+    }
+
+    async function exportAllSlides() {
+      const btn = document.getElementById('exportBtn');
+      const progress = document.getElementById('exportProgress');
+      const bar = document.getElementById('exportBar');
+      const label = document.getElementById('exportLabel');
+
+      btn.disabled = true;
+      btn.textContent = 'Exportando...';
+      btn.style.opacity = '0.6';
+      progress.style.display = 'block';
+
+      const zip = new JSZip();
+      const W = exportW, H = exportH;
+      const scale = exportScaleW / W;
+
+      const offscreen = document.createElement('div');
+      offscreen.style.cssText = 'position:fixed;left:-9999px;top:0;width:'+W+'px;height:'+H+'px;overflow:hidden;z-index:99999;background:#1A1918;';
+      document.body.appendChild(offscreen);
+
+      for (let i = 0; i < slides.length; i++) {
+        label.textContent = 'Slide ' + (i+1) + ' de ' + slides.length;
+        bar.style.width = ((i / slides.length) * 100) + '%';
+
+        const clone = slides[i].cloneNode(true);
+        clone.style.cssText = 'width:'+W+'px;min-width:'+W+'px;height:'+H+'px;position:relative;display:flex;flex-direction:column;overflow:hidden;background:#1A1918;';
+        offscreen.innerHTML = '';
+        offscreen.appendChild(clone);
+
+        fixObjectFitForExport(clone, W, H);
+
+        await new Promise(r => setTimeout(r, 300));
+
+        try {
+          const canvas = await html2canvas(offscreen, {
+            width: W, height: H, scale: scale,
+            useCORS: true, allowTaint: true,
+            backgroundColor: '#1A1918',
+            logging: false, scrollX: 0, scrollY: 0,
+            windowWidth: W, windowHeight: H,
+          });
+          const blob = await new Promise(resolve => canvas.toBlob(resolve, 'image/png', 1.0));
+          if (blob) zip.file('slide_' + String(i+1).padStart(2,'0') + '.png', blob);
+        } catch(err) {
+          console.error('Error slide ' + (i+1), err);
+        }
+      }
+
+      document.body.removeChild(offscreen);
+      bar.style.width = '100%';
+      label.textContent = 'Compactando ZIP...';
+
+      try {
+        const zipBlob = await zip.generateAsync({type: 'blob'});
+        const url = URL.createObjectURL(zipBlob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'carrossel_instagram.zip';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+        label.textContent = 'Download concluído!';
+      } catch(err) {
+        console.error('ZIP error', err);
+        label.textContent = 'Erro — veja console (F12)';
+      }
+
+      btn.disabled = false;
+      btn.textContent = 'Baixar Todos (ZIP)';
+      btn.style.opacity = '1';
+      setTimeout(() => { progress.style.display = 'none'; }, 3000);
+    }
+
+    // Initialize
+    recreateDots();
+    toggleModelControls();
+    syncPanel();
+    showSlide(0);
+  </script>
+</body>
+</html>
