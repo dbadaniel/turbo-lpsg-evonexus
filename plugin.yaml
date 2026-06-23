@@ -130,6 +130,7 @@ ui_entry_points:
   sidebar_groups:
     - id: lpsg-group
       label: Lançamento
+      position: after:operations
       order: 10
   pages:
     - id: lpsg-launches
