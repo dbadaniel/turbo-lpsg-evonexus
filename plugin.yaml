@@ -12,6 +12,10 @@ tier: essential
 capabilities:
   - agents
   - skills
+  - sql_migrations
+  - readonly_data
+  - writable_data
+  - public_pages
 
 env_vars_needed: []
 conflicts: {}
@@ -32,3 +36,37 @@ agents:
   - file: agents/revisor-copy-turbo.md
   - file: agents/social-turbo.md
   - file: agents/trafego-turbo.md
+
+writable_data:
+  - id: plugin_lpsg_lancamentos
+    description: Tabela para armazenar as configuracoes dos lancamentos
+    table: turbo_lpsg_lancamentos
+    allowed_columns: [id, cliente_id, nome, produto_principal, meta_inscritos, data_inicio, data_fim, config_json]
+  - id: plugin_lpsg_vendas
+    description: Tabela para armazenar as vendas de cada lancamento
+    table: turbo_lpsg_vendas
+    allowed_columns: [id, lancamento_id, cliente_id, produto, tipo, valor, pagamento, status, contact_id, utm_source, utm_medium, utm_campaign, first_utm_source, first_utm_medium, first_utm_campaign, lote, etapa, dia, criado_em]
+
+readonly_data:
+  - id: get_vendas_dashboard
+    description: Busca todas as vendas de um lancamento especifico para o dashboard
+    sql: "SELECT * FROM turbo_lpsg_vendas WHERE lancamento_id = :token_val"
+    public_via: sales_dashboard
+    bind_token_param: token_val
+  - id: get_lancamento_config
+    description: Busca a configuracao do lancamento a partir do token
+    sql: "SELECT * FROM turbo_lpsg_lancamentos WHERE id = :token_val"
+    public_via: sales_dashboard
+    bind_token_param: token_val
+
+public_pages:
+  - id: sales_dashboard
+    description: Dashboard publico para acompanhamento das vendas e KPIs do lancamento
+    route_prefix: dash
+    token_source:
+      table: turbo_lpsg_lancamentos
+      column: id
+    bundle: ui/public/dashboard.js
+    custom_element_name: lpsg-sales-dashboard
+    auth_mode: token
+
