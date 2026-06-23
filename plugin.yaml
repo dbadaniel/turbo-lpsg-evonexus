@@ -16,6 +16,7 @@ capabilities:
   - readonly_data
   - writable_data
   - public_pages
+  - ui_pages
 
 env_vars_needed: []
 conflicts: {}
@@ -58,6 +59,9 @@ readonly_data:
     sql: "SELECT * FROM turbo_lpsg_lancamentos WHERE id = :token_val"
     public_via: sales_dashboard
     bind_token_param: token_val
+  - id: get_all_launches
+    description: Lista todos os lancamentos cadastrados para a tela de gerenciamento
+    sql: "SELECT * FROM turbo_lpsg_lancamentos ORDER BY data_inicio DESC"
 
 public_pages:
   - id: sales_dashboard
@@ -69,4 +73,35 @@ public_pages:
     bundle: ui/public/dashboard.js
     custom_element_name: lpsg-sales-dashboard
     auth_mode: token
+
+ui_entry_points:
+  sidebar_groups:
+    - id: lpsg-group
+      label: Lançamento
+      order: 10
+  pages:
+    - id: lpsg-launches
+      label: Lançamento
+      path: launches
+      bundle: ui/pages/launches.js
+      custom_element_name: lpsg-launches-page
+      sidebar_group: lpsg-group
+      icon: LayoutDashboard
+      order: 1
+    - id: lpsg-settings
+      label: Configuração
+      path: settings
+      bundle: ui/pages/settings.js
+      custom_element_name: lpsg-settings-page
+      sidebar_group: lpsg-group
+      icon: Settings
+      order: 2
+    - id: lpsg-integration
+      label: Integração
+      path: integration
+      bundle: ui/pages/integration.js
+      custom_element_name: lpsg-integration-page
+      sidebar_group: lpsg-group
+      icon: Link
+      order: 3
 
