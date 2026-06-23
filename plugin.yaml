@@ -106,11 +106,15 @@ readonly_data:
     sql: "SELECT * FROM turbo_lpsg_vendas WHERE lancamento_id = :token_val"
     public_via: sales_dashboard
     bind_token_param: token_val
+    params:
+      token_val: ""
   - id: get_lancamento_config
     description: Busca a configuracao do lancamento a partir do token
     sql: "SELECT * FROM turbo_lpsg_lancamentos WHERE id = :token_val"
     public_via: sales_dashboard
     bind_token_param: token_val
+    params:
+      token_val: ""
   - id: get_all_launches
     description: Lista todos os lancamentos cadastrados para a tela de gerenciamento
     sql: "SELECT * FROM turbo_lpsg_lancamentos ORDER BY data_inicio DESC"
@@ -146,7 +150,6 @@ ui_entry_points:
       path: settings
       bundle: ui/pages/settings.js
       custom_element_name: lpsg-settings-page
-      sidebar_group: lpsg-group
       icon: Settings
       order: 2
     - id: lpsg-integration
@@ -154,7 +157,6 @@ ui_entry_points:
       path: integration
       bundle: ui/pages/integration.js
       custom_element_name: lpsg-integration-page
-      sidebar_group: lpsg-group
       icon: Link
       order: 3
 

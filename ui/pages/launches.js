@@ -744,14 +744,16 @@ Quero que você:
                   </div>
                   
                   ${s.cmd ? `
-                    <div style="margin-top: 8px;">
-                      <label style="font-size: 12px; font-weight: bold; display: block; margin-bottom: 4px;">Comando de IA para copiar:</label>
-                      <div class="code-cmd" data-cmd="${s.cmd}">
-                        <pre style="margin: 0; white-space: pre-wrap; font-family: monospace; font-size: 11px;">${s.cmd.substring(0, 100)}...</pre>
-                        <div style="display: flex; align-items: center; gap: 8px;">
-                          <button class="btn btn-secondary btn-run-agent" data-cmd="${s.cmd}" style="padding: 4px 8px; font-size: 11px;">Copiar & Iniciar Chat</button>
-                        </div>
+                    <div style="margin-top: 16px; background: #0d1117; border: 1px solid #388bfd33; padding: 16px; border-radius: 8px; display: flex; flex-direction: column; gap: 12px; align-items: flex-start;">
+                      <div>
+                        <strong style="color: #f0f6fc; font-size: 14px; display: block; margin-bottom: 4px;">🚀 Pronto para iniciar esta fase com a I.A.?</strong>
+                        <p style="font-size: 12.5px; line-height: 1.4; color: #8b949e; margin: 0;">
+                          Ao clicar no botão abaixo, a mensagem com as configurações deste lançamento será copiada automaticamente para a sua área de transferência e você será levado diretamente para o chat com o <strong>@estrategista-turbo</strong>. Basta colar a mensagem lá para iniciar o trabalho!
+                        </p>
                       </div>
+                      <button class="btn btn-primary btn-run-agent" data-cmd="${s.cmd.replace(/"/g, '&quot;')}" style="gap: 8px; font-size: 13px; padding: 8px 16px;">
+                        <span>Iniciar Fase no Estrategista</span>
+                      </button>
                     </div>
                   ` : ''}
                   <div style="margin-top: 12px;">
@@ -776,6 +778,40 @@ Quero que você:
         </div>
       `;
 
+      const integrationHtml = `
+        <div style="display: flex; flex-direction: column; gap: 20px;">
+          <div class="milestones-card">
+            <h2 class="milestones-title">Webhooks do Lançamento</h2>
+            <p style="font-size: 14px; line-height: 1.5; color: #c9d1d9; margin-top: 0; margin-bottom: 16px;">
+              Para enviar as vendas das plataformas de checkout (Hotmart, Kiwify, etc.) diretamente para o dashboard do EvoNexus:
+            </p>
+            <ol style="margin: 0; padding-left: 20px; font-size: 14px; color: #c9d1d9;">
+              <li style="margin-bottom: 12px;">Cadastre o Webhook na sua plataforma de checkout preferida.</li>
+              <li style="margin-bottom: 12px;">Utilize a URL do endpoint de Webhooks do EvoNexus para o lançamento atual:</li>
+            </ol>
+            <div style="background: #0d1117; border: 1px solid #30363d; padding: 16px; border-radius: 6px; font-family: monospace; font-size: 13px; overflow-x: auto; color: #ff7b72; white-space: pre-wrap; margin-bottom: 16px;">
+              http://${window.location.host}/api/plugins/${this.slug}/webhook
+            </div>
+            <p style="font-size: 13px; color: #8b949e; margin: 0;">
+              Certifique-se de configurar os eventos para enviar <code>Compra Aprovada</code> e <code>Reembolsada</code>.
+            </p>
+          </div>
+
+          <div class="milestones-card">
+            <h2 class="milestones-title">Automações no n8n (14 Workflows)</h2>
+            <p style="font-size: 14px; line-height: 1.5; color: #c9d1d9; margin-top: 0; margin-bottom: 16px;">
+              O método LPSG requer os 14 workflows de automação no n8n. Você pode importar os modelos JSON localizados na pasta <code>artifacts/</code> do plugin.
+            </p>
+            <ol style="margin: 0; padding-left: 20px; font-size: 14px; color: #c9d1d9;">
+              <li style="margin-bottom: 12px;">Acesse seu painel do n8n.</li>
+              <li style="margin-bottom: 12px;">Crie um novo workflow e vá em <strong>Import from File</strong>.</li>
+              <li style="margin-bottom: 12px;">Selecione o arquivo de template correspondente ao estágio do lançamento (ex: captação, recuperação).</li>
+              <li style="margin-bottom: 12px;">Preencha as variáveis de ambiente com o token e as credenciais correspondentes.</li>
+            </ol>
+          </div>
+        </div>
+      `;
+
       this.shadowRoot.innerHTML = `
         ${style}
         <div class="header">
@@ -787,9 +823,10 @@ Quero que você:
         <div class="tabs">
           <button class="tab ${this.activeTab === 'milestones' ? 'active' : ''}" id="tab-milestones">Visão Geral & Marcos</button>
           <button class="tab ${this.activeTab === 'roadmap' ? 'active' : ''}" id="tab-roadmap">Roteiro de Execução (Roadmap)</button>
+          <button class="tab ${this.activeTab === 'integration' ? 'active' : ''}" id="tab-integration">Integração</button>
           <button class="tab ${this.activeTab === 'dashboard' ? 'active' : ''}" id="tab-dashboard">Dashboard de Métricas</button>
         </div>
-        ${this.activeTab === 'milestones' ? milestonesHtml : this.activeTab === 'roadmap' ? roadmapHtml : dashboardHtml}
+        ${this.activeTab === 'milestones' ? milestonesHtml : this.activeTab === 'roadmap' ? roadmapHtml : this.activeTab === 'integration' ? integrationHtml : dashboardHtml}
       `;
 
       // Detail events
@@ -805,6 +842,11 @@ Quero que você:
 
       this.shadowRoot.getElementById('tab-roadmap').addEventListener('click', () => {
         this.activeTab = 'roadmap';
+        this.render();
+      });
+
+      this.shadowRoot.getElementById('tab-integration')?.addEventListener('click', () => {
+        this.activeTab = 'integration';
         this.render();
       });
 
@@ -853,9 +895,34 @@ Quero que você:
         el.addEventListener('click', (e) => {
           e.stopPropagation();
           const cmd = el.getAttribute('data-cmd');
+          const originalContent = el.innerHTML;
+          
           navigator.clipboard.writeText(cmd).then(() => {
-            alert('Comando estratégico copiado! Você será redirecionado para o chat com o @estrategista-turbo.');
+            el.style.backgroundColor = '#238636';
+            el.style.borderColor = '#2ea043';
+            el.innerHTML = '<span>✓ Copiado! Redirecionando...</span>';
+            
+            setTimeout(() => {
+              el.innerHTML = originalContent;
+              el.style.backgroundColor = '';
+              el.style.borderColor = '';
+              
+              // Robust redirect with fallback
+              window.EvoNexus.navigate('/agents/plugin-turbo-lpsg-estrategista-turbo');
+              setTimeout(() => {
+                if (window.location.pathname !== '/agents/plugin-turbo-lpsg-estrategista-turbo') {
+                  window.location.href = '/agents/plugin-turbo-lpsg-estrategista-turbo';
+                }
+              }, 150);
+            }, 1000);
+          }).catch(err => {
+            console.error('Failed to copy: ', err);
             window.EvoNexus.navigate('/agents/plugin-turbo-lpsg-estrategista-turbo');
+            setTimeout(() => {
+              if (window.location.pathname !== '/agents/plugin-turbo-lpsg-estrategista-turbo') {
+                window.location.href = '/agents/plugin-turbo-lpsg-estrategista-turbo';
+              }
+            }, 150);
           });
         });
       });
