@@ -855,7 +855,7 @@ Quero que você:
           const cmd = el.getAttribute('data-cmd');
           navigator.clipboard.writeText(cmd).then(() => {
             alert('Comando estratégico copiado! Você será redirecionado para o chat com o @estrategista-turbo.');
-            window.EvoNexus.navigate('/agents/estrategista-turbo');
+            window.EvoNexus.navigate('/agents/plugin-turbo-lpsg-estrategista-turbo');
           });
         });
       });
