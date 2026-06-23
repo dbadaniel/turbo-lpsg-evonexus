@@ -185,7 +185,7 @@ class LpsgSettingsPage extends HTMLElement {
       
       if (res.ok) {
         localStorage.removeItem('lpsg_settings_draft');
-        window.EvoNexus.navigate(`/plugins-ui/${this.slug}/launches`);
+        window.EvoNexus.navigate(`/plugins-ui/${this.slug}/launches?id=${finalId}`);
       } else {
         alert('Erro ao salvar lançamento.');
       }
