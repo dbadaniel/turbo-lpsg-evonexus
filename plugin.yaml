@@ -25,18 +25,70 @@ source_url: https://github.com/dbadaniel/turbo-lpsg-evonexus
 
 agents:
   - file: agents/automacao-turbo.md
+    category: lpsg
+    category_label: "Turbo Lançamento pago"
+    icon: Zap
+    color: "#34D399"
   - file: agents/closer-turbo.md
+    category: lpsg
+    category_label: "Turbo Lançamento pago"
+    icon: Target
+    color: "#EF4444"
   - file: agents/copywriter-turbo.md
+    category: lpsg
+    category_label: "Turbo Lançamento pago"
+    icon: Brain
+    color: "#FBBF24"
   - file: agents/cs-turbo.md
+    category: lpsg
+    category_label: "Turbo Lançamento pago"
+    icon: Headphones
+    color: "#22D3EE"
   - file: agents/designer-turbo.md
+    category: lpsg
+    category_label: "Turbo Lançamento pago"
+    icon: Camera
+    color: "#A78BFA"
   - file: agents/diretor-criativo-turbo.md
+    category: lpsg
+    category_label: "Turbo Lançamento pago"
+    icon: Lightbulb
+    color: "#818CF8"
   - file: agents/estrategista-turbo.md
+    category: lpsg
+    category_label: "Turbo Lançamento pago"
+    icon: Compass
+    color: "#FF5C00"
   - file: agents/pesquisador-mercado-turbo.md
+    category: lpsg
+    category_label: "Turbo Lançamento pago"
+    icon: Search
+    color: "#FB923C"
   - file: agents/pesquisador-turbo.md
+    category: lpsg
+    category_label: "Turbo Lançamento pago"
+    icon: BookOpen
+    color: "#FB923C"
   - file: agents/picasso-auditor-lpsg.md
+    category: lpsg
+    category_label: "Turbo Lançamento pago"
+    icon: Scale
+    color: "#94A3B8"
   - file: agents/revisor-copy-turbo.md
+    category: lpsg
+    category_label: "Turbo Lançamento pago"
+    icon: History
+    color: "#94A3B8"
   - file: agents/social-turbo.md
+    category: lpsg
+    category_label: "Turbo Lançamento pago"
+    icon: Users
+    color: "#EC4899"
   - file: agents/trafego-turbo.md
+    category: lpsg
+    category_label: "Turbo Lançamento pago"
+    icon: BarChart3
+    color: "#10B981"
 
 writable_data:
   - id: plugin_lpsg_lancamentos
