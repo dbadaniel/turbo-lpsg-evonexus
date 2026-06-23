@@ -39,10 +39,10 @@ class LpsgSettingsPage extends HTMLElement {
 
   async loadLaunch(id) {
     try {
-      const res = await fetch(`/api/plugins/${this.slug}/readonly-data/get_lancamento_config?token_val=${encodeURIComponent(id)}`);
+      const res = await fetch(`/api/plugins/${this.slug}/readonly-data/get_all_launches`);
       if (res.ok) {
         const data = await res.json();
-        const row = data.rows?.[0];
+        const row = data.rows?.find(r => r.id === id);
         if (row) {
           this.formData = {
             id: row.id,
