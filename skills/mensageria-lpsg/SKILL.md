@@ -37,7 +37,7 @@ description: >
 >
 > Toda saída desta skill **deve respeitar essas 9 regras** e cada mensagem **deve ter versão Utility-ready** que passe na aprovação da Meta API oficial.
 
-> **Nota sobre `workspace/lancamentos/{id}/03-revisoes/Mensageria-LPSG-APROVADO.docx`:** o .docx ficou no repositório como histórico do padrão da mentoria 24/04/2026. Os **ajustes posteriores listados acima sobrescrevem esse padrão** (regra 4+4 · onboarding 4 msgs · carrinho 5 horários · sem repescagem). Quando precisar atualizar o `.docx`, regenerar a partir desta SKILL.md.
+> **Nota sobre `workspace/lancamentos/{slug}/03-revisoes/Mensageria-LPSG-APROVADO.docx`:** o .docx ficou no repositório como histórico do padrão da mentoria 24/04/2026. Os **ajustes posteriores listados acima sobrescrevem esse padrão** (regra 4+4 · onboarding 4 msgs · carrinho 5 horários · sem repescagem). Quando precisar atualizar o `.docx`, regenerar a partir desta SKILL.md.
 
 ---
 
@@ -288,4 +288,4 @@ Se cumpre 3+ → revisar, pode estar denso demais.
 ---
 
 **Fonte canônica atualizada:** esta SKILL.md (regra 4+4 · 9 princípios inegociáveis).
-**Histórico arquivado:** `workspace/lancamentos/{id}/03-revisoes/Mensageria-LPSG-APROVADO.docx` (padrão original mentoria 24/04/2026 · superado pelos ajustes).
+**Histórico arquivado:** `workspace/lancamentos/{slug}/03-revisoes/Mensageria-LPSG-APROVADO.docx` (padrão original mentoria 24/04/2026 · superado pelos ajustes).

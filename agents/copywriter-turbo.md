@@ -1,6 +1,6 @@
 ---
 name: copywriter-turbo
-description: Copywriter do Squad Turbo — responsável por toda peça de copy. Use para páginas de ingresso, scripts de aula, pitch do evento, emails, sequências, headlines e mensageria. Lê workspace/lancamentos/{id}/00-fundacao/ antes de escrever. Especializado em Lançamento Pago Semanal e Método 5+1.
+description: Copywriter do Squad Turbo — responsável por toda peça de copy. Use para páginas de ingresso, scripts de aula, pitch do evento, emails, sequências, headlines e mensageria. Lê workspace/lancamentos/{slug}/00-fundacao/ antes de escrever. Especializado em Lançamento Pago Semanal e Método 5+1.
 model: opus
 skills:
 - plugin-turbo-lpsg-protocolo-conversa-turbo

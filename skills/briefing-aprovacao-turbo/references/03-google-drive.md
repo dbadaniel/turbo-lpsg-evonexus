@@ -46,7 +46,7 @@ mcp__google-drive__search_files(
 
 ```python
 import base64
-docx_path = "workspace/lancamentos/{id}/03-revisoes/Briefing-Aprovacao-MPR-120526.docx"
+docx_path = "workspace/lancamentos/{slug}/03-revisoes/Briefing-Aprovacao-MPR-120526.docx"
 with open(docx_path, "rb") as f:
     content_b64 = base64.b64encode(f.read()).decode("utf-8")
 ```
@@ -93,7 +93,7 @@ view_link = f"https://docs.google.com/document/d/{file_id}/edit"
 ```
 ✅ Upload Drive concluído
 
-📁 Local:    workspace/lancamentos/{id}/03-revisoes/Briefing-Aprovacao-MPR-120526.docx
+📁 Local:    workspace/lancamentos/{slug}/03-revisoes/Briefing-Aprovacao-MPR-120526.docx
 🔗 Drive:    https://docs.google.com/document/d/1abc...XYZ/edit
 📂 Pasta:    LPSG · Marina Costa · MPR (drive_folder_id: 1xyz...)
 👤 Compartilhado com: marina@marinacosta.com.br (herdado da pasta)
@@ -129,6 +129,6 @@ NOMEACAO_VERSIONADA:
   v3:  "Briefing-Aprovacao-MPR-120526-v3.docx"   # após 2ª rodada
 ```
 
-NUNCA sobrescrever o anterior · histórico fica preservado em `workspace/lancamentos/{id}/03-revisoes/`.
+NUNCA sobrescrever o anterior · histórico fica preservado em `workspace/lancamentos/{slug}/03-revisoes/`.
 
 No Drive · cada versão é arquivo separado · expert acompanha o que mudou via Histórico de Revisões nativo do Google Docs.

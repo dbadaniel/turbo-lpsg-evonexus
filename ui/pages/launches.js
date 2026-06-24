@@ -141,8 +141,20 @@ class LpsgLaunchesPage extends HTMLElement {
     return { blocks, configPercent, configComplete, status, statusColor, cta };
   }
 
+  slugify(text) {
+    return (text || '')
+      .toLowerCase()
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .replace(/[^a-z0-9_-]/g, '-')
+      .replace(/-+/g, '-')
+      .replace(/^-+|-+$/g, '');
+  }
+
   generateYamlConfig(launch, config) {
-    return `id: "${launch.id || ''}"
+    const slug = this.slugify(launch.nome);
+    return `slug: "${slug}"
+id: "${launch.id || ''}"
 nome: "${launch.nome || ''}"
 produto_principal: "${launch.produto_principal || ''}"
 meta_inscritos: ${launch.meta_inscritos || 0}

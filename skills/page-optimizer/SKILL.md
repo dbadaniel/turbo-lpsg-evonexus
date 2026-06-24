@@ -327,7 +327,7 @@ Se alguma métrica não passou, **voltar para Fase 3** com foco nela. Não entre
 - {otimizações de servidor, CDN, etc.}
 ```
 
-Salvar em `workspace/lancamentos/{slug}/workspace/lancamentos/{id}/05-paginas/relatorio-performance.md`.
+Salvar em `workspace/lancamentos/{slug}/workspace/lancamentos/{slug}/05-paginas/relatorio-performance.md`.
 
 ---
 
@@ -381,7 +381,7 @@ Salvar em `workspace/lancamentos/{slug}/workspace/lancamentos/{id}/05-paginas/re
 - Invocada pelo `@diretor-criativo-emb` após aprovação visual da página pelo dono
 - Pergunta plataforma ao dono (regra operacional 6 do CLAUDE.md)
 - Nunca otimiza antes do GO do dono na versão visual
-- Relatório final vai para `workspace/lancamentos/{slug}/workspace/lancamentos/{id}/05-paginas/relatorio-performance.md`
+- Relatório final vai para `workspace/lancamentos/{slug}/workspace/lancamentos/{slug}/05-paginas/relatorio-performance.md`
 - Se score não atinge o teto realista, `@diretor-criativo-emb` decide: nova iteração visual ou ajuste de expectativa com o dono
 
 ---
