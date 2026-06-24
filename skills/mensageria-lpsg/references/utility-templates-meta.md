@@ -466,4 +466,4 @@ Se faz sentido pra você, é agora.
 ---
 
 **Fonte canônica:** `~/.claude/skills/mensageria-lpsg/SKILL.md` (regra 4+4 atualizada 2026-04-30).
-**Histórico arquivado:** `03-revisoes/Mensageria-LPSG-APROVADO.docx` (padrão original mentoria 24/04/2026 · superado pelos ajustes).
+**Histórico arquivado:** `workspace/lancamentos/{id}/03-revisoes/Mensageria-LPSG-APROVADO.docx` (padrão original mentoria 24/04/2026 · superado pelos ajustes).

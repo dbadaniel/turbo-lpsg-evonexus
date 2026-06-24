@@ -142,7 +142,8 @@ class LpsgLaunchesPage extends HTMLElement {
   }
 
   generateYamlConfig(launch, config) {
-    return `nome: "${launch.nome || ''}"
+    return `id: "${launch.id || ''}"
+nome: "${launch.nome || ''}"
 produto_principal: "${launch.produto_principal || ''}"
 meta_inscritos: ${launch.meta_inscritos || 0}
 data_inicio: "${launch.data_inicio || ''}"

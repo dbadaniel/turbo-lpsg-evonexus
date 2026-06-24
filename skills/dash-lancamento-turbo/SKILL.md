@@ -233,7 +233,7 @@ Heurística local no Worker (sem custo de IA):
 2. Alerta (maior variação negativa OU gatilho laranja)
 3. Recomendação acionável (ex: "velocidade caiu 40%, hora de reativar lista morna")
 
-Se `CLAUDE_API_KEY` estiver configurada, Worker chama Claude com os agregados do dia e devolve 3 bullets em tom Leo Tabari (lido de `00-fundacao/voz.md`).
+Se `CLAUDE_API_KEY` estiver configurada, Worker chama Claude com os agregados do dia e devolve 3 bullets em tom Leo Tabari (lido de `workspace/lancamentos/{id}/00-fundacao/voz.md`).
 
 ### Coortes automáticas
 
@@ -370,7 +370,7 @@ dash/[cliente_id]-[lancamento_id]/
 
 ## 10. Integração com outros agentes/skills do Squad Turbo
 
-- `@pesquisador-turbo` — fornece `00-fundacao/voz.md` para `/insights` narrar no tom do expert
+- `@pesquisador-turbo` — fornece `workspace/lancamentos/{id}/00-fundacao/voz.md` para `/insights` narrar no tom do expert
 - `@diretor-criativo-turbo` — valida layout do dashboard antes do deploy (Anti-IA)
 - `@designer-turbo` — executa tweaks visuais se cliente pedir customização pesada
 - `design-tokens-turbo` — fonte única de verdade dos tokens

@@ -150,9 +150,9 @@ preenche os blocos faltantes, gera o YAML novamente.
 ```
 [Cadastro validado]
        ↓
-1. @pesquisador-turbo            → 6 dossiês internos (00-fundacao/)
+1. @pesquisador-turbo            → 6 dossiês internos (workspace/lancamentos/{id}/00-fundacao/)
        ↓
-2. @pesquisador-mercado-turbo    → 8 frentes externas (02-mercado/)
+2. @pesquisador-mercado-turbo    → 8 frentes externas (workspace/lancamentos/{id}/02-mercado/)
        ↓
 [Só depois · começa Fase 1 das 10 estruturas]
 ```
@@ -167,7 +167,7 @@ preenche os blocos faltantes, gera o YAML novamente.
 Cadastro do projeto:
 [insere o YAML do usuário aqui]
 
-Construa os 6 dossiês fundacionais em 00-fundacao/:
+Construa os 6 dossiês fundacionais em workspace/lancamentos/{id}/00-fundacao/:
 - voz.md (tom · vocabulário · linguagem do {especialista.nome})
 - avatar.md (perfil · dor · desejo do {avatar})
 - oferta.md (stack · garantia · ticket do {produto.nome})
@@ -190,7 +190,7 @@ Cadastro do projeto:
 - Big idea: {big_idea.frase}
 - Concorrentes diretos: [a definir · explore o nicho]
 
-Gere relatórios em 02-mercado/ cobrindo as 8 frentes:
+Gere relatórios em workspace/lancamentos/{id}/02-mercado/ cobrindo as 8 frentes:
 1. Mercado (TAM/SAM/SOM · tendências · regulação)
 2. Concorrência direta (3-5 players · ofertas · tickets · ads ativos)
 3. Conteúdo que performa no nicho (hooks · thumbnails · padrões)
@@ -210,7 +210,7 @@ Quando terminar, sinaliza "MERCADO PRONTO" para eu continuar.
 PESQUISA FUNDACIONAL · ✅ CONCLUÍDA
 ═══════════════════════════════════════════════
 
-📁 00-fundacao/ gerado:
+📁 workspace/lancamentos/{id}/00-fundacao/ gerado:
    • voz.md
    • avatar.md
    • oferta.md
@@ -218,7 +218,7 @@ PESQUISA FUNDACIONAL · ✅ CONCLUÍDA
    • referencias-expert.md
    • inventario.md
 
-📁 02-mercado/ gerado:
+📁 workspace/lancamentos/{id}/02-mercado/ gerado:
    • 01-mercado-tam-sam.md
    • 02-concorrencia-direta.md
    • 03-conteudo-performa.md
@@ -243,7 +243,7 @@ PESQUISA FUNDACIONAL · ✅ CONCLUÍDA
 
 ## 📑 PASSO 2.5 · Briefing de aprovação · GATE OBRIGATÓRIO
 
-> **GATE não-negociável.** Após pesquisa fundacional concluir e ANTES de qualquer fase 1-10 rodar, o orquestrador AUTOMATICAMENTE aciona `briefing-aprovacao-turbo` para consolidar `00-fundacao/` + `02-mercado/` em UM documento `.docx` narrativo coeso · subir no Drive · pausar e aguardar aprovação assinada do especialista.
+> **GATE não-negociável.** Após pesquisa fundacional concluir e ANTES de qualquer fase 1-10 rodar, o orquestrador AUTOMATICAMENTE aciona `briefing-aprovacao-turbo` para consolidar `workspace/lancamentos/{id}/00-fundacao/` + `workspace/lancamentos/{id}/02-mercado/` em UM documento `.docx` narrativo coeso · subir no Drive · pausar e aguardar aprovação assinada do especialista.
 
 **Por que esse gate existe:**
 - Sem aprovação narrativa antes da execução · há retrabalho de 5-10h em copy, criativo, página, oferta
@@ -257,17 +257,17 @@ PESQUISA FUNDACIONAL · ✅ CONCLUÍDA
 
 Projeto: {SIGLA} ({nome do expert} · {nome do evento})
 Cadastro: {path do YAML}
-Fundacao: 00-fundacao/
-Mercado: 02-mercado/
+Fundacao: workspace/lancamentos/{id}/00-fundacao/
+Mercado: workspace/lancamentos/{id}/02-mercado/
 Pasta Drive: {dom.drive_folder_id do cadastro}
 ```
 
 ### O que a skill faz
 
-1. Valida pré-requisitos (`00-fundacao/` 6 arquivos · `02-mercado/` 8 relatórios)
+1. Valida pré-requisitos (`workspace/lancamentos/{id}/00-fundacao/` 6 arquivos · `workspace/lancamentos/{id}/02-mercado/` 8 relatórios)
 2. Consolida em `briefing-aprovacao.md` (9 seções narrativas)
 3. Renderiza `.docx` formatado · capa + sumário + 9 seções + frase de aprovação
-4. Salva em `03-revisoes/Briefing-Aprovacao-{SIGLA}-{DDMMYY}.docx`
+4. Salva em `workspace/lancamentos/{id}/03-revisoes/Briefing-Aprovacao-{SIGLA}-{DDMMYY}.docx`
 5. Sobe na pasta do cliente no Google Drive (via MCP `mcp__google-drive__create_file`)
 6. Retorna link Drive + path local
 7. **PAUSA o orquestrador** · aguarda aprovação manual
@@ -279,7 +279,7 @@ Pasta Drive: {dom.drive_folder_id do cadastro}
 BRIEFING DE APROVAÇÃO · ✅ GERADO
 ═══════════════════════════════════════════════
 
-📁 Local:    03-revisoes/Briefing-Aprovacao-{SIGLA}-{DDMMYY}.docx
+📁 Local:    workspace/lancamentos/{id}/03-revisoes/Briefing-Aprovacao-{SIGLA}-{DDMMYY}.docx
 🔗 Drive:    https://docs.google.com/document/d/{ID}/edit
 
 ⏸️  EXECUÇÃO PAUSADA · aguardando aprovação do especialista
@@ -295,7 +295,7 @@ Próximo passo HUMANO:
 
 > **Não execute Fase 1 sem ouvir "briefing aprovado · pode seguir Fase 1" do operador.** Esse é o gate que evita retrabalho.
 
-> Se o expert pedir ajustes (opção 2): aplique mudanças em `00-fundacao/` ou `02-mercado/` · regenere briefing com `briefing-aprovacao-turbo` · sobe `v2` no Drive · espera nova aprovação.
+> Se o expert pedir ajustes (opção 2): aplique mudanças em `workspace/lancamentos/{id}/00-fundacao/` ou `workspace/lancamentos/{id}/02-mercado/` · regenere briefing com `briefing-aprovacao-turbo` · sobe `v2` no Drive · espera nova aprovação.
 
 > Se o expert NÃO aprovar (opção 3): pause TUDO · retorne pra `@pesquisador-turbo` ou `@pesquisador-mercado-turbo` revisar a fundação. Não improvise execução sem briefing aprovado.
 
@@ -327,7 +327,7 @@ manual-final-lpsg            → Manual de execução personalizado (HTML site) 
 
 > **Fase 11 é OBRIGATÓRIA.** Gera o `manual-execucao.html` na raiz do projeto consolidando tudo que foi feito · onde encontrar cada parte · o que fazer com cada entregável. É o legado entregável do projeto.
 
-> **Cada fase referencia `00-fundacao/` e `02-mercado/`** gerados no Passo 2.
+> **Cada fase referencia `workspace/lancamentos/{id}/00-fundacao/` e `workspace/lancamentos/{id}/02-mercado/`** gerados no Passo 2.
 > Detalhe técnico de cada fase em `references/07-workflow-execucao.md`.
 
 ---
@@ -354,7 +354,7 @@ manual-final-lpsg            → Manual de execução personalizado (HTML site) 
 ### Hierarquia de invocação
 
 1. **Pesquisadores SEMPRE rodam primeiro** (Passo 2 · obrigatório · não pula)
-2. **`@copywriter-turbo`** lê `00-fundacao/` antes de escrever (referência ao output do pesquisador)
+2. **`@copywriter-turbo`** lê `workspace/lancamentos/{id}/00-fundacao/` antes de escrever (referência ao output do pesquisador)
 3. **`@diretor-criativo-turbo`** recebe copy aprovada do copywriter, define direção
 4. **`@designer-turbo`** executa o que o diretor criativo aprovou
 5. Outros agentes (tráfego · automação · social · cs) entram nas fases específicas

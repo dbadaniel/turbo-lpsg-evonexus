@@ -19,8 +19,8 @@ TAMANHO_TOTAL:        "18-30 páginas A4 · margem 2.5cm"
 
 ## Seção 01 · Contexto · por que agora
 
-**Fonte primária:** `00-fundacao/briefing.md` (síntese do expert)
-**Fonte complementar:** `02-mercado/07-tendencias.md` (timing externo)
+**Fonte primária:** `workspace/lancamentos/{id}/00-fundacao/briefing.md` (síntese do expert)
+**Fonte complementar:** `workspace/lancamentos/{id}/02-mercado/07-tendencias.md` (timing externo)
 
 **Estrutura:**
 1. Parágrafo de abertura · narrativa · qual problema do mercado o expert quer endereçar
@@ -34,8 +34,8 @@ TAMANHO_TOTAL:        "18-30 páginas A4 · margem 2.5cm"
 
 ## Seção 02 · Avatar · quem compra
 
-**Fonte primária:** `00-fundacao/avatar.md` (avatar interno do expert)
-**Fonte complementar:** `02-mercado/04-linguagem-avatar.md` (avatar de pesquisa de mercado)
+**Fonte primária:** `workspace/lancamentos/{id}/00-fundacao/avatar.md` (avatar interno do expert)
+**Fonte complementar:** `workspace/lancamentos/{id}/02-mercado/04-linguagem-avatar.md` (avatar de pesquisa de mercado)
 
 **Estrutura:**
 1. Perfil demográfico (1 parágrafo · idade · gênero · renda · contexto)
@@ -52,7 +52,7 @@ TAMANHO_TOTAL:        "18-30 páginas A4 · margem 2.5cm"
 
 ## Seção 03 · Posicionamento competitivo
 
-**Fonte primária:** `02-mercado/02-concorrencia-direta.md` + `06-gaps.md` + `08-ads-ativos.md`
+**Fonte primária:** `workspace/lancamentos/{id}/02-mercado/02-concorrencia-direta.md` + `06-gaps.md` + `08-ads-ativos.md`
 
 **Estrutura:**
 1. Tabela dos 5 maiores concorrentes (nome · promessa · ticket · posicionamento)
@@ -68,7 +68,7 @@ TAMANHO_TOTAL:        "18-30 páginas A4 · margem 2.5cm"
 
 ## Seção 04 · Big idea
 
-**Fonte primária:** `00-fundacao/briefing.md` (síntese)
+**Fonte primária:** `workspace/lancamentos/{id}/00-fundacao/briefing.md` (síntese)
 
 **Estrutura:**
 1. **A frase** · big idea isolada em blockquote gigante
@@ -82,7 +82,7 @@ TAMANHO_TOTAL:        "18-30 páginas A4 · margem 2.5cm"
 
 ## Seção 05 · Promessa
 
-**Fonte primária:** `00-fundacao/oferta.md` + `briefing.md`
+**Fonte primária:** `workspace/lancamentos/{id}/00-fundacao/oferta.md` + `briefing.md`
 
 **Estrutura:**
 1. **Promessa central** · "O avatar leva X em prazo Y aplicando Z"
@@ -96,7 +96,7 @@ TAMANHO_TOTAL:        "18-30 páginas A4 · margem 2.5cm"
 
 ## Seção 06 · Oferta
 
-**Fonte primária:** `00-fundacao/oferta.md`
+**Fonte primária:** `workspace/lancamentos/{id}/00-fundacao/oferta.md`
 
 **Estrutura:**
 1. **Ingresso** (low-ticket · filtro de bolso · função no funil)
@@ -127,7 +127,7 @@ TAMANHO_TOTAL:        "18-30 páginas A4 · margem 2.5cm"
 
 ## Seção 08 · Riscos e mitigações
 
-**Fonte primária:** `02-mercado/06-gaps.md` + experiência do squad
+**Fonte primária:** `workspace/lancamentos/{id}/02-mercado/06-gaps.md` + experiência do squad
 
 **Estrutura:**
 - Tabela com 7 riscos (5 padrão LPSG + 2 específicos do nicho)
@@ -161,9 +161,9 @@ TAMANHO_TOTAL:        "18-30 páginas A4 · margem 2.5cm"
 ## Anexos (opcional)
 
 Linkados via Google Drive:
-- `00-fundacao/avatar.md` (pesquisa de avatar completa)
-- `00-fundacao/briefing.md`
-- `02-mercado/` (8 relatórios)
+- `workspace/lancamentos/{id}/00-fundacao/avatar.md` (pesquisa de avatar completa)
+- `workspace/lancamentos/{id}/00-fundacao/briefing.md`
+- `workspace/lancamentos/{id}/02-mercado/` (8 relatórios)
 - `_private/cadastro-{SIGLA}.yaml`
 
 ---

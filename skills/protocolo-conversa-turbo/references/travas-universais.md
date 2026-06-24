@@ -25,10 +25,10 @@
 ```
 TRIGGER: usuário pede "executar LPSG" / "crie meu LPSG" / "começar projeto"
    │
-   ├── 1. @pesquisador-turbo       → extrai 6 dossiês internos (00-fundacao/)
+   ├── 1. @pesquisador-turbo       → extrai 6 dossiês internos (workspace/lancamentos/{id}/00-fundacao/)
    │                                  voz · avatar · oferta · briefing · referências · inventário
    │
-   ├── 2. @pesquisador-mercado-turbo → extrai 8 frentes externas (02-mercado/)
+   ├── 2. @pesquisador-mercado-turbo → extrai 8 frentes externas (workspace/lancamentos/{id}/02-mercado/)
    │                                   concorrência · benchmarks · objeções · gaps
    │
    ├── 3. briefing-aprovacao-turbo → consolida tudo em UM .docx narrativo (9 seções)
@@ -51,8 +51,8 @@ TRIGGER: usuário pede "executar LPSG" / "crie meu LPSG" / "começar projeto"
 pelo expert ANTES de qualquer fase rodar.
 
 Status atual:
-- [ ] 00-fundacao/ · @pesquisador-turbo rodou?
-- [ ] 02-mercado/ · @pesquisador-mercado-turbo rodou?
+- [ ] workspace/lancamentos/{id}/00-fundacao/ · @pesquisador-turbo rodou?
+- [ ] workspace/lancamentos/{id}/02-mercado/ · @pesquisador-mercado-turbo rodou?
 - [ ] Briefing .docx gerado e subido no Drive?
 - [ ] Expert assinou aprovação?
 
@@ -62,8 +62,8 @@ Depois eu executo [a fase X] com o contexto certo."
 
 ### Por que esse gate existe (justificativa pra recusar pressão por atalho)
 
-- Sem fundação interna (`00-fundacao/`) → copy genérica, não soa o expert
-- Sem fundação externa (`02-mercado/`) → posicionamento clonado, sem diferenciação
+- Sem fundação interna (`workspace/lancamentos/{id}/00-fundacao/`) → copy genérica, não soa o expert
+- Sem fundação externa (`workspace/lancamentos/{id}/02-mercado/`) → posicionamento clonado, sem diferenciação
 - Sem briefing assinado → expert descobre rumos errados só DEPOIS de copy/página/criativo prontos · 5-10h de retrabalho
 - Com o gate → expert vê a narrativa numa folha só, marca o que muda, todas as fases rodam alinhadas
 

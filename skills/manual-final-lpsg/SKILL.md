@@ -63,8 +63,8 @@ deste projeto. Cole no path: {projeto_root}/manual-execucao.html
 Antes de gerar, leia:
 
 - **Cadastro YAML** (do PASSO 1 do orquestrador) → personalização
-- **`00-fundacao/`** (gerado pelo @pesquisador-turbo) → voz · avatar · oferta
-- **`02-mercado/`** (gerado pelo @pesquisador-mercado-turbo) → benchmarks
+- **`workspace/lancamentos/{id}/00-fundacao/`** (gerado pelo @pesquisador-turbo) → voz · avatar · oferta
+- **`workspace/lancamentos/{id}/02-mercado/`** (gerado pelo @pesquisador-mercado-turbo) → benchmarks
 - **Outputs das 10 fases** → arquivos gerados em cada estrutura
 
 ### 2. Estrutura do manual final
@@ -265,8 +265,8 @@ Após Fase 10 do orquestrador, ele chama:
 Projeto concluído: {NOME_PROJETO}
 Cadastro original em: _private/cadastro-{NOME_PROJETO}.yaml
 Outputs gerados em:
-- 00-fundacao/
-- 02-mercado/
+- workspace/lancamentos/{id}/00-fundacao/
+- workspace/lancamentos/{id}/02-mercado/
 - 03-paginas-{SIGLA}/
 - 04-criativos-{SIGLA}/
 - 05-aulas-{SIGLA}/

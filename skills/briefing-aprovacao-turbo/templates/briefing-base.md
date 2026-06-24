@@ -43,7 +43,7 @@ Anexos: pesquisa de avatar · pesquisa de mercado · cadastro YAML
 
 ## 01 · Contexto · por que agora
 
-> Síntese de `00-fundacao/briefing.md` + `02-mercado/07-tendencias.md`
+> Síntese de `workspace/lancamentos/{id}/00-fundacao/briefing.md` + `workspace/lancamentos/{id}/02-mercado/07-tendencias.md`
 
 {CONTEXTO_PARAGRAFO_1}
 
@@ -58,7 +58,7 @@ Anexos: pesquisa de avatar · pesquisa de mercado · cadastro YAML
 
 ## 02 · Avatar · quem compra
 
-> Síntese de `00-fundacao/avatar.md` + `02-mercado/04-linguagem-avatar.md`
+> Síntese de `workspace/lancamentos/{id}/00-fundacao/avatar.md` + `workspace/lancamentos/{id}/02-mercado/04-linguagem-avatar.md`
 
 **Perfil demográfico:**
 - {DEMOGRAFICO}
@@ -97,7 +97,7 @@ Anexos: pesquisa de avatar · pesquisa de mercado · cadastro YAML
 
 ## 03 · Posicionamento competitivo
 
-> Síntese de `02-mercado/02-concorrencia-direta.md` + `06-gaps.md` + `08-ads-ativos.md`
+> Síntese de `workspace/lancamentos/{id}/02-mercado/02-concorrencia-direta.md` + `06-gaps.md` + `08-ads-ativos.md`
 
 **5 maiores concorrentes diretos:**
 
@@ -130,7 +130,7 @@ Anexos: pesquisa de avatar · pesquisa de mercado · cadastro YAML
 
 ## 04 · Big idea
 
-> Síntese de `00-fundacao/briefing.md`
+> Síntese de `workspace/lancamentos/{id}/00-fundacao/briefing.md`
 
 ### A frase
 
@@ -156,7 +156,7 @@ Anexos: pesquisa de avatar · pesquisa de mercado · cadastro YAML
 
 ## 05 · Promessa
 
-> Síntese de `00-fundacao/oferta.md` + `briefing.md`
+> Síntese de `workspace/lancamentos/{id}/00-fundacao/oferta.md` + `briefing.md`
 
 ### Promessa central
 
@@ -180,7 +180,7 @@ Anexos: pesquisa de avatar · pesquisa de mercado · cadastro YAML
 
 ## 06 · Oferta · ingresso e produto principal
 
-> Síntese de `00-fundacao/oferta.md`
+> Síntese de `workspace/lancamentos/{id}/00-fundacao/oferta.md`
 
 ### Ingresso (filtro de bolso)
 
@@ -286,9 +286,9 @@ Anexos: pesquisa de avatar · pesquisa de mercado · cadastro YAML
 
 ## Anexos
 
-- `00-fundacao/avatar.md` (pesquisa de avatar completa)
-- `00-fundacao/briefing.md` (briefing fundacional)
-- `02-mercado/` (8 relatórios de pesquisa de mercado)
+- `workspace/lancamentos/{id}/00-fundacao/avatar.md` (pesquisa de avatar completa)
+- `workspace/lancamentos/{id}/00-fundacao/briefing.md` (briefing fundacional)
+- `workspace/lancamentos/{id}/02-mercado/` (8 relatórios de pesquisa de mercado)
 - `_private/cadastro-{SIGLA}.yaml` (cadastro YAML completo)
 
 ---
