@@ -793,6 +793,33 @@ Quero que você:
 
       const integrationHtml = `
         <div style="display: flex; flex-direction: column; gap: 20px;">
+          <div class="milestones-card" style="border-color: #f0883e33; background: #161b22;">
+            <h2 class="milestones-title" style="color: #f0883e; display: flex; align-items: center; gap: 8px;">
+              ⚠️ Pré-requisitos do Sistema & Dependências
+            </h2>
+            <p style="font-size: 14px; line-height: 1.5; color: #c9d1d9; margin-top: 0; margin-bottom: 12px;">
+              Para o pleno funcionamento dos agentes e das skills de geração de documentos (como o briefing narrativo em Word), certifique-se de configurar os seguintes requisitos no seu ambiente do EvoNexus:
+            </p>
+            <div style="display: flex; flex-direction: column; gap: 12px;">
+              <div style="background: #0d1117; border: 1px solid #30363d; padding: 12px; border-radius: 6px;">
+                <strong style="color: #f0f6fc; font-size: 13.5px; display: block; margin-bottom: 6px;">1. Dependências do Python (para o gerador .docx)</strong>
+                <p style="font-size: 12.5px; color: #8b949e; margin: 0 0 8px 0;">
+                  Execute o comando abaixo no terminal do servidor EvoNexus (WSL) para instalar os pacotes necessários para a geração de arquivos Office Word:
+                </p>
+                <code style="font-family: monospace; font-size: 12.5px; color: #79c0ff; display: block; background: #161b22; padding: 8px; border-radius: 4px; border: 1px solid #21262d;">
+                  pip install python-docx pyyaml
+                </code>
+              </div>
+              
+              <div style="background: #0d1117; border: 1px solid #30363d; padding: 12px; border-radius: 6px;">
+                <strong style="color: #f0f6fc; font-size: 13.5px; display: block; margin-bottom: 6px;">2. Servidor MCP do Google Drive (para upload de arquivos)</strong>
+                <p style="font-size: 12.5px; color: #8b949e; margin: 0;">
+                  Os agentes utilizam a ferramenta do <strong>Google Drive MCP</strong> (<code>mcp__google-drive</code>) para criar pastas e subir os relatórios na nuvem para revisão do expert. Garanta que ele esteja configurado e autorizado no arquivo <code>.mcp.json</code> ou nas configurações do seu cliente Claude.
+                </p>
+              </div>
+            </div>
+          </div>
+
           <div class="milestones-card">
             <h2 class="milestones-title">Webhooks do Lançamento</h2>
             <p style="font-size: 14px; line-height: 1.5; color: #c9d1d9; margin-top: 0; margin-bottom: 16px;">
