@@ -20,7 +20,20 @@ capabilities:
 
 env_vars_needed: []
 conflicts: {}
-dependencies: {}
+dependencies:
+  python:
+    packages:
+      python-docx: ">=1.1,<2"
+      pyyaml: ">=6.0"
+
+prerequisites:
+  - id: google-drive-mcp
+    type: mcp
+    name: google-drive
+    label: "Google Drive MCP"
+    required: true
+    instructions: "Configure o servidor MCP do Google Drive para permitir que o orquestrador e os agentes criem e subam os briefings narrativos (.docx) automaticamente para a nuvem."
+
 source_url: https://github.com/dbadaniel/turbo-lpsg-evonexus
 
 agents:
