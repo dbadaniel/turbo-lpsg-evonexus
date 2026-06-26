@@ -1,9 +1,8 @@
 # Turbo LPSG for EvoNexus
 
-Plugin de conhecimento e orquestracao do metodo Lancamento Pago Semanal
-Gravado (LPSG), mantido a partir do projeto da Turbo Academy.
+Este é o plugin de conhecimento e orquestração do método Lançamento Pago Semanal Gravado (LPSG) da Turbo Academy, adaptado especificamente para o ambiente EvoNexus.
 
-## Conteudo
+## Conteúdo
 
 - 13 agents especialistas, incluindo estrategista, copywriter, trafego e closer.
 - Skills do metodo LPSG e ferramentas de producao empacotadas com namespace.
