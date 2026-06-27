@@ -1,6 +1,6 @@
 id: turbo-lpsg
 name: Turbo LPSG
-version: 0.1.0
+version: 0.1.1
 description: Metodo e squad para planejar e executar lancamentos pagos semanais no EvoNexus.
 author: Turbo Academy
 license: MIT AND CC-BY-NC-SA-4.0
@@ -8,6 +8,7 @@ homepage: https://github.com/dbadaniel/turbo-lpsg-evonexus
 
 min_evonexus_version: 0.33.0
 tier: essential
+command_prefix: turbo
 
 capabilities:
   - agents
@@ -38,66 +39,92 @@ source_url: https://github.com/dbadaniel/turbo-lpsg-evonexus
 
 agents:
   - file: agents/automacao-turbo.md
+    display_name: "Automação Turbo"
+    command_name: automacao
     category: lpsg
     category_label: "Turbo Lançamento pago"
     icon: Zap
     color: "#34D399"
   - file: agents/closer-turbo.md
+    display_name: "Closer Turbo"
+    command_name: closer
     category: lpsg
     category_label: "Turbo Lançamento pago"
     icon: Target
     color: "#EF4444"
   - file: agents/copywriter-turbo.md
+    display_name: "Copywriter Turbo"
+    command_name: copywriter
     category: lpsg
     category_label: "Turbo Lançamento pago"
     icon: Brain
     color: "#FBBF24"
   - file: agents/cs-turbo.md
+    display_name: "CS Turbo"
+    command_name: cs
     category: lpsg
     category_label: "Turbo Lançamento pago"
     icon: Headphones
     color: "#22D3EE"
   - file: agents/designer-turbo.md
+    display_name: "Designer Turbo"
+    command_name: designer
     category: lpsg
     category_label: "Turbo Lançamento pago"
     icon: Camera
     color: "#A78BFA"
   - file: agents/diretor-criativo-turbo.md
+    display_name: "Diretor Criativo Turbo"
+    command_name: diretor-criativo
     category: lpsg
     category_label: "Turbo Lançamento pago"
     icon: Lightbulb
     color: "#818CF8"
   - file: agents/estrategista-turbo.md
+    display_name: "Estrategista Turbo"
+    command_name: estrategista
     category: lpsg
     category_label: "Turbo Lançamento pago"
     icon: Compass
     color: "#FF5C00"
   - file: agents/pesquisador-mercado-turbo.md
+    display_name: "Pesquisador Mercado Turbo"
+    command_name: pesquisador-mercado
     category: lpsg
     category_label: "Turbo Lançamento pago"
     icon: Search
     color: "#FB923C"
   - file: agents/pesquisador-turbo.md
+    display_name: "Pesquisador Turbo"
+    command_name: pesquisador
     category: lpsg
     category_label: "Turbo Lançamento pago"
     icon: BookOpen
     color: "#FB923C"
   - file: agents/picasso-auditor-lpsg.md
+    display_name: "Picasso Auditor LPSG"
+    command_name: picasso-auditor
     category: lpsg
     category_label: "Turbo Lançamento pago"
     icon: Scale
     color: "#94A3B8"
   - file: agents/revisor-copy-turbo.md
+    display_name: "Revisor Copy Turbo"
+    command_name: revisor-copy
     category: lpsg
     category_label: "Turbo Lançamento pago"
     icon: History
     color: "#94A3B8"
   - file: agents/social-turbo.md
+    display_name: "Social Turbo"
+    command_name: social
     category: lpsg
     category_label: "Turbo Lançamento pago"
     icon: Users
     color: "#EC4899"
   - file: agents/trafego-turbo.md
+    display_name: "Tráfego Turbo"
+    command_name: trafego
     category: lpsg
     category_label: "Turbo Lançamento pago"
     icon: BarChart3
